@@ -1,12 +1,9 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:buk/widgets/feed/feed_item.dart';
 import 'package:flutter/material.dart';
 
-import 'dart:math' as math;
-
-import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -23,26 +20,21 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
         home: Scaffold(
-      body: Container(child: ListView.builder(itemBuilder: (_, index) {
-        return Container(
-          width: 500,
-          height: 500,
-          margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-                .withOpacity(1.0),
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 3), // changes position of shadow
-              ),
-            ],
+      body: Container(
+        child: RefreshIndicator(
+          onRefresh: () {
+            return Future.delayed(const Duration(seconds: 1), () {
+              print("Refreshed");
+            });
+          },
+          child: ListView.builder(
+            itemBuilder: (_, index) {
+              return const FeedItem();
+            },
+            physics: const AlwaysScrollableScrollPhysics(),
           ),
-        );
-      })),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             print('Floating action button pressed');
