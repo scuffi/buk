@@ -49,7 +49,7 @@ class ItemHeader extends StatelessWidget {
                 height: 50,
                 width: 50,
                 child: Icon(
-                  Icons.bookmark,
+                  Icons.bookmark_outline,
                   color: Colors.black87,
                 ),
               ),

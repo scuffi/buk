@@ -1,4 +1,5 @@
 import 'package:buk/widgets/feed/sub/item_carousel.dart';
+import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:buk/widgets/feed/sub/item_description.dart';
 import 'package:buk/widgets/feed/sub/item_footer.dart';
 import 'package:buk/widgets/feed/sub/item_header.dart';
@@ -8,7 +9,7 @@ class FeedItem extends StatelessWidget {
   const FeedItem({Key? key, required this.info, this.loading = false})
       : super(key: key);
 
-  final Map info;
+  final ItemData info;
   final bool loading;
 
   @override
@@ -31,10 +32,10 @@ class FeedItem extends StatelessWidget {
       ),
       child: Column(
         children: [
-          ItemHeader(title: info["title"], loading: loading),
-          ItemCarousel(loading: loading),
-          ItemDescription(description: info["description"], loading: loading),
-          ItemFooter(loading: loading),
+          ItemHeader(title: info.title, loading: loading),
+          ItemCarousel(images: info.images, loading: loading),
+          ItemDescription(description: info.description, loading: loading),
+          ItemFooter(user: info.owner, loading: loading),
         ],
       ),
     );

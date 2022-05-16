@@ -4,9 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ItemFooter extends StatelessWidget {
-  const ItemFooter({Key? key, this.loading = false}) : super(key: key);
+  const ItemFooter({Key? key, required this.user, this.loading = false})
+      : super(key: key);
 
   final bool loading;
+  final String user;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,8 @@ class ItemFooter extends StatelessWidget {
                   highlightColor: Colors.grey[100]!,
                   child:
                       Container(width: 50, height: 50, color: Colors.grey[300]))
-              : const ProfilePicture(
-                  name: 'Archie Ferguson',
+              : ProfilePicture(
+                  name: user,
                   radius: 21,
                   fontsize: 15,
                 ),
@@ -33,7 +35,7 @@ class ItemFooter extends StatelessWidget {
                 child:
                     Container(width: 180, height: 30, color: Colors.grey[300]))
             : SelectableText(
-                "Archie Ferguson",
+                user,
                 style: GoogleFonts.lato(fontSize: 15, color: Colors.black87),
               ),
         const Spacer(),

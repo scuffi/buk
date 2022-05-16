@@ -1,4 +1,6 @@
 import 'package:buk/widgets/feed/feed_item.dart';
+import 'package:buk/widgets/feed/interface/category_type.dart';
+import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:flutter/material.dart';
 
 class FeedLoading extends StatelessWidget {
@@ -7,21 +9,32 @@ class FeedLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: const [
+      children: [
         FeedItem(
-          info: {
-            "title": "",
-            "description": "",
-            "username": "",
-          },
+          info: ItemData(
+              title: "",
+              description: "",
+              images: [],
+              category: ItemCategory.clothes,
+              owner: ""),
           loading: true,
         ),
         FeedItem(
-          info: {
-            "title": "",
-            "description": "",
-            "username": "",
-          },
+          info: ItemData(
+              title: "",
+              description: "",
+              images: [],
+              category: ItemCategory.clothes,
+              owner: ""),
+          loading: true,
+        ),
+        FeedItem(
+          info: ItemData(
+              title: "",
+              description: "",
+              images: [],
+              category: ItemCategory.clothes,
+              owner: ""),
           loading: true,
         ),
       ],
