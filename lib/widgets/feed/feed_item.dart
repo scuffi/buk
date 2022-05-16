@@ -5,15 +5,17 @@ import 'package:buk/widgets/feed/sub/item_header.dart';
 import 'package:flutter/material.dart';
 
 class FeedItem extends StatelessWidget {
-  const FeedItem({Key? key, required this.info}) : super(key: key);
+  const FeedItem({Key? key, required this.info, this.loading = false})
+      : super(key: key);
 
   final Map info;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 500,
-      // height: 500,
+      // height: loading ? 500 : 0,
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white70,
@@ -29,10 +31,10 @@ class FeedItem extends StatelessWidget {
       ),
       child: Column(
         children: [
-          ItemHeader(title: info["title"]),
-          const ItemCarousel(),
-          ItemDescription(description: info["description"]),
-          const ItemFooter(),
+          ItemHeader(title: info["title"], loading: loading),
+          ItemCarousel(loading: loading),
+          ItemDescription(description: info["description"], loading: loading),
+          ItemFooter(loading: loading),
         ],
       ),
     );

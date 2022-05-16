@@ -2,6 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:buk/providers/feed_loader.dart';
 import 'package:buk/providers/feed_provider.dart';
 import 'package:buk/widgets/feed/feed_item.dart';
+import 'package:buk/widgets/feed_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +29,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     Future.delayed(
-      const Duration(seconds: 3),
+      const Duration(seconds: 10),
       () => {
         Provider.of<FeedLoader>(context, listen: false).setLoaded(true),
       },
@@ -86,7 +87,7 @@ class _MyAppState extends State<MyApp> {
                           )
                         : const Text("There's nothing here!"),
                   )
-                : const Text("Loading information..."),
+                : const FeedLoading(),
           ),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -45,19 +46,30 @@ final List<Widget> imageSliders = imgList
     .toList();
 
 class ItemCarousel extends StatelessWidget {
-  const ItemCarousel({Key? key}) : super(key: key);
+  const ItemCarousel({Key? key, this.loading = false}) : super(key: key);
+
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: CarouselSlider(
-      options: CarouselOptions(
-        aspectRatio: 2.0,
-        enlargeCenterPage: true,
-        scrollDirection: Axis.horizontal,
-        autoPlay: false,
-      ),
-      items: imageSliders,
-    ));
+        child: loading
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                        width: 500, height: 200, color: Colors.grey[300])),
+              )
+            : CarouselSlider(
+                options: CarouselOptions(
+                  aspectRatio: 2.0,
+                  enlargeCenterPage: true,
+                  scrollDirection: Axis.horizontal,
+                  autoPlay: false,
+                ),
+                items: imageSliders,
+              ));
   }
 }
