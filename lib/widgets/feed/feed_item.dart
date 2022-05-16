@@ -5,7 +5,9 @@ import 'package:buk/widgets/feed/sub/item_header.dart';
 import 'package:flutter/material.dart';
 
 class FeedItem extends StatelessWidget {
-  const FeedItem({Key? key}) : super(key: key);
+  const FeedItem({Key? key, required this.info}) : super(key: key);
+
+  final Map info;
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +28,11 @@ class FeedItem extends StatelessWidget {
         ],
       ),
       child: Column(
-        children: const [
-          ItemHeader(title: "Title here"),
-          ItemCarousel(),
-          ItemDescription(
-              description:
-                  '''This block of text is the first paragraph in this 
-example, and is not very long.
-This block of text is the second paragraph, and 
-is also not very long, which is nice.'''),
-          ItemFooter(),
+        children: [
+          ItemHeader(title: info["title"]),
+          const ItemCarousel(),
+          ItemDescription(description: info["description"]),
+          const ItemFooter(),
         ],
       ),
     );
