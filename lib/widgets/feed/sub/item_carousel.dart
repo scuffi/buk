@@ -39,11 +39,11 @@ class ItemCarousel extends StatelessWidget {
       : super(key: key);
 
   final bool loading;
-  final List<String> images;
+  final List<String>? images;
 
   @override
   Widget build(BuildContext context) {
-    return images.isEmpty
+    return images == null || images!.isEmpty
         ? Container()
         : Container(
             child: loading
@@ -62,7 +62,7 @@ class ItemCarousel extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       autoPlay: false,
                     ),
-                    items: imageSliders(images),
+                    items: imageSliders(images!),
                   ));
   }
 }

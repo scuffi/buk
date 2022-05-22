@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../translate/translate_text.dart';
+
 class ItemHeader extends StatelessWidget {
   const ItemHeader({Key? key, required this.title, this.loading = false})
       : super(key: key);
@@ -24,12 +26,14 @@ class ItemHeader extends StatelessWidget {
                     highlightColor: Colors.grey[100]!,
                     child: Container(
                         width: 180, height: 30, color: Colors.grey[300]))
-                : Text(
-                    title,
-                    overflow: TextOverflow.ellipsis,
+                : TranslateText(
+                    text: title,
                     style: GoogleFonts.poppins(
-                      textStyle:
-                          const TextStyle(color: Colors.black87, fontSize: 22),
+                      textStyle: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 22,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
             alignment: Alignment.centerLeft,

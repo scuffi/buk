@@ -35,7 +35,7 @@ class FeedItem extends StatelessWidget {
           ItemHeader(title: info.title, loading: loading),
           ItemCarousel(images: info.images, loading: loading),
           ItemDescription(description: info.description, loading: loading),
-          ItemFooter(user: info.owner, loading: loading),
+          ItemFooter(user: info.owner_name, loading: loading),
         ],
       ),
     );

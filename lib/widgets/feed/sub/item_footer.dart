@@ -3,6 +3,8 @@ import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../translate/translate_text.dart';
+
 class ItemFooter extends StatelessWidget {
   const ItemFooter({Key? key, required this.user, this.loading = false})
       : super(key: key);
@@ -33,7 +35,7 @@ class ItemFooter extends StatelessWidget {
                 baseColor: Colors.grey[300]!,
                 highlightColor: Colors.grey[100]!,
                 child:
-                    Container(width: 180, height: 30, color: Colors.grey[300]))
+                    Container(width: 165, height: 30, color: Colors.grey[300]))
             : SelectableText(
                 user,
                 style: GoogleFonts.lato(fontSize: 15, color: Colors.black87),
@@ -53,17 +55,20 @@ class ItemFooter extends StatelessWidget {
                 ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(right: 8.0),
           child: loading
               ? Shimmer.fromColors(
                   baseColor: Colors.grey[300]!,
                   highlightColor: Colors.grey[100]!,
                   child:
-                      Container(width: 35, height: 35, color: Colors.grey[300]))
-              : const Icon(
-                  Icons.message,
-                  color: Colors.black87,
-                ),
+                      Container(width: 60, height: 35, color: Colors.grey[300]))
+              : OutlinedButton(
+                  onPressed: () {},
+                  child: const TranslateText(
+                    text: "Contact",
+                    ukrainian: "контакт",
+                    selectable: false,
+                  )),
         ),
       ],
     );

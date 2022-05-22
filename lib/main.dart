@@ -1,11 +1,9 @@
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:buk/pages/feed_page.dart';
 import 'package:buk/providers/feed_loader.dart';
 import 'package:buk/providers/feed_provider.dart';
-import 'package:buk/widgets/feed/feed_empty.dart';
-import 'package:buk/widgets/feed/feed_item.dart';
-import 'package:buk/widgets/feed/interface/category_type.dart';
-import 'package:buk/widgets/feed/interface/item_data.dart';
-import 'package:buk/widgets/feed_loading.dart';
+import 'package:buk/providers/language/language_provider.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,13 +16,20 @@ final List<String> imgList = [
   'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
 ];
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => FeedData()),
         ChangeNotifierProvider(create: (context) => FeedLoader()),
+        ChangeNotifierProvider(create: (context) => Language()),
       ],
+      // child: DevicePreview(
+      //   enabled: !kReleaseMode,
+      //   builder: (context) => const MyApp(), // Wrap your app
+      // ),
       child: const MyApp(),
     ),
   );
@@ -40,94 +45,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    Future.delayed(
-      const Duration(seconds: 3),
-      () => {
-        Provider.of<FeedLoader>(context, listen: false).setLoaded(true),
-      },
-    );
-    Future.delayed(
-      const Duration(seconds: 6),
-      () => {
-        Provider.of<FeedData>(context, listen: false).addItem(
-          ItemData(
-              title: "Awesome title",
-              description: "lorem ipsum description",
-              images: imgList,
-              category: ItemCategory.clothes,
-              owner: "Archie Ferguson"),
-        ),
-        Provider.of<FeedData>(context, listen: false).addItem(
-          ItemData(
-              title: "Super cool title",
-              description: "lorem ipsum description",
-              images: [],
-              category: ItemCategory.clothes,
-              owner: "Archie Ferguson"),
-        ),
-        Provider.of<FeedData>(context, listen: false).addItem(
-          ItemData(
-              title: "Basic title",
-              description: "lorem ipsum description",
-              images: [],
-              category: ItemCategory.clothes,
-              owner: "Archie Ferguson"),
-        ),
-      },
-    );
-
-    var _bottomNavIndex = 0;
-
     return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        child: RefreshIndicator(
-          onRefresh: () {
-            return Future.delayed(const Duration(seconds: 1), () {
-              print("Refreshed");
-            });
-          },
-          child: Consumer<FeedLoader>(
-            builder: (_, loader, __) => loader.loaded
-                ? Consumer<FeedData>(
-                    builder: (_, data, __) => data.items.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: data.items.length,
-                            itemBuilder: (_, index) {
-                              return FeedItem(info: data.items[index]);
-                            },
-                          )
-                        : const FeedEmpty(),
-                  )
-                : const FeedLoading(),
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print('Floating action button pressed');
-          },
-          child: const Icon(Icons.add)
-
-          //params
-          ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: AnimatedBottomNavigationBar(
-        icons: const [
-          Icons.home,
-          Icons.search,
-          Icons.add_circle_outline,
-          Icons.settings
-        ],
-        activeIndex: _bottomNavIndex,
-        gapLocation: GapLocation.center,
-        leftCornerRadius: 32,
-        rightCornerRadius: 32,
-        notchSmoothness: NotchSmoothness.smoothEdge,
-        onTap: (index) => setState(() => _bottomNavIndex = index),
-        //other params
-      ),
-    ));
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      home: const FeedPage(),
+    );
   }
 }

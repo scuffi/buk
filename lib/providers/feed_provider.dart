@@ -2,26 +2,62 @@ import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:flutter/material.dart';
 
 class FeedData with ChangeNotifier {
-  final List<ItemData> _items = [];
+  List<ItemData> _request_items = [];
+  List<ItemData> _offer_items = [];
 
-  List<ItemData> get items => _items;
+  List<ItemData> get requestItems => _request_items;
+  List<ItemData> get offerItems => _offer_items;
 
-  ItemData itemAt(int index) {
-    return _items.elementAt(index);
+  ItemData requestItemAt(int index) {
+    return _request_items.elementAt(index);
   }
 
-  void setItemAt(int index, ItemData item) {
-    _items[index] = item;
+  ItemData offerItemAt(int index) {
+    return _offer_items.elementAt(index);
+  }
+
+  void setRequestItemAt(int index, ItemData item) {
+    _request_items[index] = item;
     notifyListeners();
   }
 
-  void addItem(ItemData item) {
-    _items.add(item);
+  void setOfferItemAt(int index, ItemData item) {
+    _offer_items[index] = item;
     notifyListeners();
   }
 
-  void clear() {
-    _items.clear();
+  void setRequestItems(List<ItemData> items) {
+    _request_items = items;
     notifyListeners();
+  }
+
+  void setOfferItems(List<ItemData> items) {
+    _offer_items = items;
+    notifyListeners();
+  }
+
+  void addRequestItem(ItemData item) {
+    _request_items.add(item);
+    // notifyListeners();
+  }
+
+  void addOfferItem(ItemData item) {
+    _offer_items.add(item);
+    // notifyListeners();
+  }
+
+  void clearRequestItems() {
+    _request_items.clear();
+    notifyListeners();
+  }
+
+  void clearOfferItems() {
+    _offer_items.clear();
+    notifyListeners();
+  }
+
+  void clearAll() {
+    _offer_items.clear();
+    _request_items.clear();
   }
 }

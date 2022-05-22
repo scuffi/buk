@@ -1,3 +1,4 @@
+import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
@@ -22,8 +23,8 @@ class ItemDescription extends StatelessWidget {
                 highlightColor: Colors.grey[100]!,
                 child:
                     Container(width: 500, height: 100, color: Colors.grey[300]))
-            : SelectableText(
-                description,
+            : TranslateText(
+                text: description,
                 textAlign: TextAlign.left,
                 style: GoogleFonts.roboto(
                     textStyle:

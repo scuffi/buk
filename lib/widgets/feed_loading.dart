@@ -9,6 +9,7 @@ class FeedLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      shrinkWrap: true,
       children: [
         FeedItem(
           info: ItemData(
@@ -16,7 +17,9 @@ class FeedLoading extends StatelessWidget {
               description: "",
               images: [],
               category: ItemCategory.clothes,
-              owner: ""),
+              owner_name: "",
+              owner_id: "",
+              owner_contact: {}),
           loading: true,
         ),
         FeedItem(
@@ -25,7 +28,9 @@ class FeedLoading extends StatelessWidget {
               description: "",
               images: [],
               category: ItemCategory.clothes,
-              owner: ""),
+              owner_name: "",
+              owner_id: "",
+              owner_contact: {}),
           loading: true,
         ),
         FeedItem(
@@ -34,7 +39,9 @@ class FeedLoading extends StatelessWidget {
               description: "",
               images: [],
               category: ItemCategory.clothes,
-              owner: ""),
+              owner_name: "",
+              owner_id: "",
+              owner_contact: {}),
           loading: true,
         ),
       ],
