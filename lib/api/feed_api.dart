@@ -1,5 +1,5 @@
-import 'package:buk/providers/feed_loader.dart';
-import 'package:buk/providers/feed_provider.dart';
+import 'package:buk/providers/feed/feed_loader.dart';
+import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/widgets/feed/interface/category_type.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,6 +1,6 @@
 import 'package:buk/pages/feed_page.dart';
-import 'package:buk/providers/feed_loader.dart';
-import 'package:buk/providers/feed_provider.dart';
+import 'package:buk/providers/feed/feed_loader.dart';
+import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/providers/language/language_provider.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';

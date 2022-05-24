@@ -4,8 +4,8 @@ import 'package:buk/widgets/feed_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/feed_loader.dart';
-import '../../providers/feed_provider.dart';
+import '../../providers/feed/feed_loader.dart';
+import '../../providers/feed/feed_provider.dart';
 
 class RequestFeed extends StatelessWidget {
   const RequestFeed({Key? key}) : super(key: key);
