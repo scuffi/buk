@@ -2,6 +2,8 @@ import 'package:buk/pages/feed_page.dart';
 import 'package:buk/providers/feed/feed_loader.dart';
 import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/providers/language/language_provider.dart';
+import 'package:buk/providers/post/category_provider.dart';
+import 'package:buk/providers/post/image_picker_provider.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,9 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => FeedData()),
         ChangeNotifierProvider(create: (context) => FeedLoader()),
         ChangeNotifierProvider(create: (context) => Language()),
+        // ? Post page providers
+        ChangeNotifierProvider(create: (context) => CategoryProvider()),
+        ChangeNotifierProvider(create: (context) => PickerProvider()),
       ],
       // child: DevicePreview(
       //   enabled: !kReleaseMode,

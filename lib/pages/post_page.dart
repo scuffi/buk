@@ -1,7 +1,9 @@
-import 'package:buk/pages/feed_page.dart';
 import 'package:buk/providers/language/language_enum.dart';
 import 'package:buk/providers/language/language_provider.dart';
+import 'package:buk/providers/post/image_picker_provider.dart';
+import 'package:buk/widgets/post/category_selector_input.dart';
 import 'package:buk/widgets/post/description_input.dart';
+import 'package:buk/widgets/post/image_upload.dart';
 import 'package:buk/widgets/post/title_input.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +28,10 @@ class _PostPageState extends State<PostPage> {
         resizeToAvoidBottomInset: false,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const FeedPage()),
-            );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(builder: (context) => const FeedPage()),
+            // );
+            Provider.of<PickerProvider>(context, listen: false).clearImages();
           },
         ),
         body: Stack(children: [
@@ -85,7 +88,7 @@ class _PostPageState extends State<PostPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Container(
-                    height: height * 0.1,
+                    height: height * 0.05,
                     width: width * 0.8,
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -98,6 +101,7 @@ class _PostPageState extends State<PostPage> {
                               blurRadius: 6,
                               offset: const Offset(0, 4)),
                         ]),
+                    child: const PostCategoryForm(),
                   ),
                 ),
               ),
@@ -106,7 +110,7 @@ class _PostPageState extends State<PostPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Container(
-                    height: height * 0.2,
+                    height: height * 0.15 + 32,
                     width: width * 0.8,
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -119,6 +123,7 @@ class _PostPageState extends State<PostPage> {
                               blurRadius: 6,
                               offset: const Offset(0, 4)),
                         ]),
+                    child: Wrap(children: const [ImagePost()]),
                   ),
                 ),
               ),
