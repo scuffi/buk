@@ -88,13 +88,6 @@ class ImagePost extends StatelessWidget {
                                 ],
                               ),
                             ));
-                    // final List<XFile>? photos = await picker.pickMultiImage();
-
-                    // if (photos != null && images.images.length < 6) {
-                    //   images.addImages(photos);
-
-                    //   print(images.images.length);
-                    // }
                   }),
                   child: DottedBorder(
                     borderType: BorderType.RRect,

@@ -3,6 +3,7 @@ import 'package:buk/api/feed_api.dart';
 import 'package:buk/pages/post_page.dart';
 import 'package:buk/providers/initial/initial_provider.dart';
 import 'package:buk/providers/user_provider.dart';
+import 'package:buk/widgets/feed/feed_empty.dart';
 import 'package:buk/widgets/feed/feed_offer.dart';
 import 'package:buk/widgets/feed/feed_request.dart';
 import 'package:buk/widgets/translate/language_switch.dart';
@@ -28,7 +29,7 @@ class _FeedPageState extends State<FeedPage>
   void initState() {
     super.initState();
 
-    controller = TabController(length: 2, vsync: this);
+    controller = TabController(length: 3, vsync: this);
 
     Future.delayed(
       const Duration(seconds: 0),
@@ -87,6 +88,12 @@ class _FeedPageState extends State<FeedPage>
                 selectable: false,
               ),
             ),
+            Tab(
+              child: TranslateText(
+                text: "Liked",
+                selectable: false,
+              ),
+            ),
           ],
         ),
       ),
@@ -109,6 +116,7 @@ class _FeedPageState extends State<FeedPage>
             },
             child: const OfferFeed(),
           ),
+          const FeedEmpty(),
         ],
       ),
       floatingActionButton: FloatingActionButton(

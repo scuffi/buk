@@ -17,11 +17,14 @@ class ItemHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Row(
       children: [
         Container(
           height: 50,
-          width: 322,
+          width: width * 0.75,
           padding: const EdgeInsets.only(left: 10),
           child: Align(
             child: loading
@@ -29,7 +32,9 @@ class ItemHeader extends StatelessWidget {
                     baseColor: Colors.grey[300]!,
                     highlightColor: Colors.grey[100]!,
                     child: Container(
-                        width: 180, height: 30, color: Colors.grey[300]))
+                        width: width * 0.75,
+                        height: 30,
+                        color: Colors.grey[300]))
                 : TranslateText(
                     text: info.title,
                     style: GoogleFonts.poppins(

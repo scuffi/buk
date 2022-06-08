@@ -205,7 +205,6 @@ class _PostPageState extends State<PostPage> {
                                 images = await uploadImages(item.images, id);
                               }
 
-                              print(user);
                               String userId = user.user!.uid;
                               String userName = user.user!.displayName!;
 
