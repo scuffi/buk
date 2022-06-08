@@ -14,7 +14,7 @@ class LanguageSwitch extends StatefulWidget {
 }
 
 class _LanguageSwitchState extends State<LanguageSwitch> {
-  bool positive = false;
+  bool positive = true;
   @override
   Widget build(BuildContext context) {
     // return AnimatedToggleSwitch<bool>.dual(
@@ -38,65 +38,43 @@ class _LanguageSwitchState extends State<LanguageSwitch> {
     //       value ? Flag.fromCode(FlagsCode.GB) : Flag.fromCode(FlagsCode.UA),
     // );
 
-    return CustomAnimatedToggleSwitch<bool>(
+    return AnimatedToggleSwitch<bool>.rolling(
       current: positive,
-      values: const [false, true],
-      dif: 0.0,
-      indicatorSize: const Size.square(30.0),
-      animationDuration: const Duration(milliseconds: 200),
-      animationCurve: Curves.linear,
-      iconBuilder: (context, local, global) {
-        return const SizedBox();
-      },
-      defaultCursor: SystemMouseCursors.click,
+      values: const [true, false],
       onTap: () {
-        setState(() => positive = !positive);
+        setState(() {
+          positive = !positive;
+        });
         Provider.of<Language>(context, listen: false)
-            .setLang(positive ? LanguageType.uk : LanguageType.en);
+            .setLang(positive ? LanguageType.en : LanguageType.uk);
       },
-      iconsTappable: false,
-      wrapperBuilder: (context, global, child) {
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned(
-                left: 10.0,
-                right: 10.0,
-                height: 20.0,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Color.lerp(
-                        Colors.black26, Colors.black54, global.position),
-                    borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  ),
-                )),
-            child,
-          ],
+      onChanged: (i) {
+        setState(() {
+          positive = i;
+        });
+        Provider.of<Language>(context, listen: false)
+            .setLang(positive ? LanguageType.en : LanguageType.uk);
+      },
+      iconBuilder: (lang, size, foreGround) {
+        return Padding(
+          padding: EdgeInsets.all(foreGround ? 2.0 : 5.0),
+          child: Container(
+            child: Flag.fromCode(
+              lang ? FlagsCode.GB : FlagsCode.UA,
+              borderRadius: 32,
+              flagSize: FlagSize.size_1x1,
+            ),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(32),
+                border: foreGround
+                    ? Border.all(color: Colors.purple[300]!, width: 4)
+                    : const Border()),
+          ),
         );
       },
-      foregroundIndicatorBuilder: (context, global) {
-        // return SizedBox.fromSize(
-        //   size: global.indicatorSize,
-        //   child: DecoratedBox(
-        //     decoration: BoxDecoration(
-        //       color: Color.lerp(Colors.white, Colors.pink, global.position),
-        //       borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-        //       boxShadow: const [
-        //         BoxShadow(
-        //             color: Colors.black38,
-        //             spreadRadius: 0.05,
-        //             blurRadius: 1.1,
-        //             offset: Offset(0.0, 0.8))
-        //       ],
-        //     ),
-        //   ),
-        // );
-        return Flag.fromCode(
-          global.current ? FlagsCode.UA : FlagsCode.GB,
-          borderRadius: 32,
-          fit: BoxFit.fill,
-        );
-      },
+      colorBuilder: (i) => Colors.transparent,
+      borderColor: Colors.transparent,
+      innerColor: Colors.black.withOpacity(0.1),
     );
   }
 }

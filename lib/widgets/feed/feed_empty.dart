@@ -31,7 +31,16 @@ class FeedEmpty extends StatelessWidget {
             ),
           ),
         ),
-        const Spacer(),
+        // const Spacer(),
+        const Padding(
+          padding: EdgeInsets.only(bottom: 50.0, top: 60.0),
+          child: Center(
+            child: Icon(
+              Icons.arrow_downward_rounded,
+              size: 96,
+            ),
+          ),
+        ),
       ],
     );
   }

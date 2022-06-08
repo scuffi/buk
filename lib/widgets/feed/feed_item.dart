@@ -32,10 +32,10 @@ class FeedItem extends StatelessWidget {
       ),
       child: Column(
         children: [
-          ItemHeader(title: info.title, loading: loading),
+          ItemHeader(info: info, loading: loading),
           ItemCarousel(images: info.images, loading: loading),
           ItemDescription(description: info.description, loading: loading),
-          ItemFooter(user: info.owner_name, loading: loading),
+          ItemFooter(info: info, loading: loading),
         ],
       ),
     );

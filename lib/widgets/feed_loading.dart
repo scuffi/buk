@@ -13,6 +13,7 @@ class FeedLoading extends StatelessWidget {
       children: [
         FeedItem(
           info: ItemData(
+              id: "",
               title: "",
               description: "",
               images: [],
@@ -24,6 +25,7 @@ class FeedLoading extends StatelessWidget {
         ),
         FeedItem(
           info: ItemData(
+              id: "",
               title: "",
               description: "",
               images: [],
@@ -35,6 +37,7 @@ class FeedLoading extends StatelessWidget {
         ),
         FeedItem(
           info: ItemData(
+              id: "",
               title: "",
               description: "",
               images: [],

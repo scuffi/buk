@@ -7,6 +7,7 @@ class FeedData with ChangeNotifier {
 
   List<ItemData> get requestItems => _request_items;
   List<ItemData> get offerItems => _offer_items;
+  List<ItemData> get fullFeed => [..._request_items, ..._offer_items];
 
   ItemData requestItemAt(int index) {
     return _request_items.elementAt(index);
@@ -38,12 +39,16 @@ class FeedData with ChangeNotifier {
 
   void addRequestItem(ItemData item) {
     _request_items.add(item);
-    // notifyListeners();
+    notifyListeners();
   }
 
   void addOfferItem(ItemData item) {
     _offer_items.add(item);
-    // notifyListeners();
+    notifyListeners();
+  }
+
+  void notify() {
+    notifyListeners();
   }
 
   void clearRequestItems() {

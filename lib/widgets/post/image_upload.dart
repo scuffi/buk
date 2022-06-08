@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:buk/providers/post/image_picker_provider.dart';
+import 'package:buk/providers/post/post_form_provider.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ class ImagePost extends StatelessWidget {
     return SizedBox(
       height: height * 0.15 + 32,
       width: width * 0.8,
-      child: Consumer<PickerProvider>(
+      child: Consumer<PostFormProvider>(
         builder: (_, images, __) => ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: images.images.length + 1,
@@ -147,7 +147,8 @@ class ImagePost extends StatelessWidget {
                         width: height * 0.15,
                         child: Image.file(
                           File(
-                            Provider.of<PickerProvider>(context, listen: false)
+                            Provider.of<PostFormProvider>(context,
+                                    listen: false)
                                 .images[index - 1]
                                 .path,
                           ),
@@ -159,9 +160,9 @@ class ImagePost extends StatelessWidget {
                       bottom: height * 0.1,
                       left: height * 0.075,
                       child: TextButton(
-                        onPressed: () =>
-                            Provider.of<PickerProvider>(context, listen: false)
-                                .removeImage(index - 1),
+                        onPressed: () => Provider.of<PostFormProvider>(context,
+                                listen: false)
+                            .removeImage(index - 1),
                         child: const Icon(
                           Icons.delete,
                           color: Colors.white,

@@ -1,18 +1,20 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:buk/api/feed_api.dart';
 import 'package:buk/pages/post_page.dart';
-import 'package:buk/providers/language/language_enum.dart';
-import 'package:buk/providers/language/language_provider.dart';
+import 'package:buk/providers/initial/initial_provider.dart';
+import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/feed/feed_offer.dart';
 import 'package:buk/widgets/feed/feed_request.dart';
 import 'package:buk/widgets/translate/language_switch.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
-import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 class FeedPage extends StatefulWidget {
-  const FeedPage({Key? key}) : super(key: key);
+  const FeedPage({Key? key, required this.user}) : super(key: key);
+
+  final User user;
 
   @override
   State<FeedPage> createState() => _FeedPageState();
@@ -27,9 +29,13 @@ class _FeedPageState extends State<FeedPage>
     super.initState();
 
     controller = TabController(length: 2, vsync: this);
+
     Future.delayed(
-      const Duration(seconds: 1),
-      () => {updateFeeds(context)},
+      const Duration(seconds: 0),
+      () {
+        Provider.of<UserProvider>(context, listen: false).setUser(widget.user);
+        updateFeeds(context);
+      },
     );
   }
 
@@ -47,9 +53,21 @@ class _FeedPageState extends State<FeedPage>
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          children: const [
-            Spacer(),
-            LanguageSwitch(),
+          children: [
+            TextButton(
+              child: const Icon(
+                Icons.logout,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Provider.of<InitialProvider>(context, listen: false)
+                    .setPassed(false);
+                Provider.of<UserProvider>(context, listen: false).clearUser();
+              },
+            ),
+            const Spacer(),
+            const LanguageSwitch(),
           ],
         ),
         // shape: const RoundedRectangleBorder(
@@ -94,26 +112,21 @@ class _FeedPageState extends State<FeedPage>
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.transparent,
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const PostPage(),
-                fullscreenDialog: true,
-              ),
-            );
-          },
-          child: Flag.fromCode(
-            Provider.of<Language>(context, listen: true).language ==
-                    LanguageType.en
-                ? FlagsCode.GB
-                : FlagsCode.UA,
-            fit: BoxFit.fill,
-            borderRadius: 32,
-          )
-
-          //params
-          ),
+        backgroundColor: Colors.blue,
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const PostPage(),
+              fullscreenDialog: true,
+            ),
+          );
+        },
+        child: const Icon(
+          Icons.add,
+          size: 40,
+        ),
+        //params
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
         icons: const [

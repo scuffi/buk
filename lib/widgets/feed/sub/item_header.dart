@@ -1,14 +1,18 @@
+import 'package:buk/api/feed_api.dart';
+import 'package:buk/providers/user_provider.dart';
+import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../translate/translate_text.dart';
 
 class ItemHeader extends StatelessWidget {
-  const ItemHeader({Key? key, required this.title, this.loading = false})
+  const ItemHeader({Key? key, required this.info, this.loading = false})
       : super(key: key);
 
-  final String title;
+  final ItemData info;
   final bool loading;
 
   @override
@@ -27,7 +31,7 @@ class ItemHeader extends StatelessWidget {
                     child: Container(
                         width: 180, height: 30, color: Colors.grey[300]))
                 : TranslateText(
-                    text: title,
+                    text: info.title,
                     style: GoogleFonts.poppins(
                       textStyle: const TextStyle(
                         color: Colors.black87,
@@ -49,14 +53,34 @@ class ItemHeader extends StatelessWidget {
                   child:
                       Container(width: 35, height: 35, color: Colors.grey[300]),
                 ))
-            : const SizedBox(
-                height: 50,
-                width: 50,
-                child: Icon(
-                  Icons.bookmark_outline,
-                  color: Colors.black87,
-                ),
-              ),
+            : context.read<UserProvider>().user!.uid == info.owner_id
+                ? SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: TextButton(
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.black87,
+                      ),
+                      onPressed: () async {
+                        // var success = await deleteItem(info.id);
+                        deleteItem(info.id).then(
+                          (value) => updateFeeds(context),
+                        );
+
+                        // print(success ? "Deleted" : "Failed to delete");
+                        // updateFeeds(context);
+                      },
+                    ),
+                  )
+                : const SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Icon(
+                      Icons.bookmark_outline,
+                      color: Colors.black87,
+                    ),
+                  ),
       ],
     );
   }

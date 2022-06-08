@@ -1,5 +1,6 @@
 import 'package:buk/providers/language/language_enum.dart';
 import 'package:buk/providers/language/language_provider.dart';
+import 'package:buk/providers/post/post_form_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,6 +36,10 @@ class PostTitleForm extends StatelessWidget {
               ? "Title"
               : "Назва",
         ),
+        onChanged: (val) {
+          formKey.currentState!.validate();
+          Provider.of<PostFormProvider>(context, listen: false).setTitle(val);
+        },
       ),
     );
   }

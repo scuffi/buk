@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-List<Widget> imageSliders(List<String> imgList) => imgList
+List<Widget> imageSliders(List<dynamic> imgList) => imgList
     .map((item) => Container(
           margin: const EdgeInsets.all(5.0),
           child: ClipRRect(
@@ -39,11 +39,11 @@ class ItemCarousel extends StatelessWidget {
       : super(key: key);
 
   final bool loading;
-  final List<String>? images;
+  final List<dynamic> images;
 
   @override
   Widget build(BuildContext context) {
-    return images == null || images!.isEmpty
+    return images.isEmpty
         ? Container()
         : Container(
             child: loading
@@ -62,7 +62,7 @@ class ItemCarousel extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       autoPlay: false,
                     ),
-                    items: imageSliders(images!),
+                    items: imageSliders(images),
                   ));
   }
 }

@@ -1,9 +1,10 @@
 import 'package:buk/widgets/feed/interface/category_type.dart';
 
 class ItemData {
+  String id;
   String title;
   String description;
-  List<String>? images;
+  List<dynamic> images;
   ItemCategory category;
 
   String owner_name;
@@ -13,9 +14,10 @@ class ItemData {
   String item_type;
 
   ItemData({
+    required this.id,
     required this.title,
     required this.description,
-    this.images,
+    required this.images,
     required this.category,
     required this.owner_name,
     required this.owner_id,

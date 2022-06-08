@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:buk/providers/language/language_enum.dart';
 import 'package:buk/providers/language/language_provider.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +49,8 @@ class _TranslateTextState extends State<TranslateText> {
 
         setState(() {
           if (!mounted) return;
-          translations[LanguageType.uk] = value.toString();
+          translations[LanguageType.uk] =
+              utf8.decode(utf8.encode(value.toString()));
         });
       });
     } else {

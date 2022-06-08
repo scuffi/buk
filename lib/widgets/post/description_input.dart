@@ -1,3 +1,4 @@
+import 'package:buk/providers/post/post_form_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -41,6 +42,11 @@ class PostDescriptionForm extends StatelessWidget {
               ? "Enter description"
               : "Введіть опис",
         ),
+        onChanged: (val) {
+          formKey.currentState!.validate();
+          Provider.of<PostFormProvider>(context, listen: false)
+              .setDescription(val);
+        },
       ),
     );
   }

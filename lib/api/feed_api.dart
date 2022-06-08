@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:buk/providers/feed/feed_loader.dart';
 import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/widgets/feed/interface/category_type.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../widgets/feed/interface/item_data.dart';
 
@@ -11,27 +16,56 @@ import 'package:buk/config.dart' as config;
 
 void updateFeeds(BuildContext context) {
   // Set loading status
-  Provider.of<FeedLoader>(context, listen: false).setLoaded(false);
+  final loader = Provider.of<FeedLoader>(context, listen: false);
+  final feed = Provider.of<FeedData>(context, listen: false);
 
-  Provider.of<FeedData>(context, listen: false).clearAll();
+  loader.setLoaded(false);
+
+  feed.clearAll();
 
   _fetchFeedItems().then((items) {
     // Iterate through List<ItemData>
     for (var item in items) {
       // Put items into correct types
+
       if (item.item_type == "request") {
-        Provider.of<FeedData>(context, listen: false).addRequestItem(item);
+        feed.addRequestItem(item);
       } else if (item.item_type == "offer") {
-        Provider.of<FeedData>(context, listen: false).addOfferItem(item);
+        feed.addOfferItem(item);
       }
     }
 
-    // Currently uneeded, maybe change addXYZItem to not notify listeners?
-    // Provider.of<FeedData>(context, listen: false).notifyListeners();
-
-    // Set loaded to true
-    Provider.of<FeedLoader>(context, listen: false).setLoaded(true);
+    loader.setLoaded(true);
   });
+}
+
+Future<bool> createUserInDb(User user) async {
+  var db = FirebaseFirestore.instance;
+  var col = db.collection(config.userCollectionName);
+
+  var input = {
+    "likes": [],
+    "user_id": user.uid,
+  };
+
+  try {
+    await col.add(input);
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
+
+Future<bool> userExistsInDb(User user) async {
+  var db = FirebaseFirestore.instance.collection(config.userCollectionName);
+
+  var snapshot = await db
+      .where(FieldPath.fromString('user_id'), isEqualTo: user.uid)
+      .limit(1)
+      .get();
+
+  return snapshot.docs.isNotEmpty;
 }
 
 Future<List<ItemData>> _fetchFeedItems() async {
@@ -41,9 +75,10 @@ Future<List<ItemData>> _fetchFeedItems() async {
   await db.collection(config.feedCollectionName).get().then((event) {
     for (var doc in event.docs) {
       data.add(ItemData(
+        id: doc.id,
         title: doc.get("title"),
         description: doc.get("description"),
-        // images: doc.get("images"),
+        images: doc.get("images"),
         category: ItemCategory.values.asNameMap()[doc.get("category")]!,
         owner_name: doc.get("owner_name"),
         owner_id: doc.get("owner_id"),
@@ -54,4 +89,64 @@ Future<List<ItemData>> _fetchFeedItems() async {
   });
 
   return data;
+}
+
+Future<List<String>> uploadImages(List<XFile> images, String idHash) async {
+  List<String> urls = [];
+  for (XFile image in images) {
+    final path = "images/$idHash/${image.name}";
+    final file = File(image.path);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+    UploadTask uploadTask = ref.putFile(file);
+
+    final snapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await snapshot.ref.getDownloadURL();
+
+    urls.add(downloadUrl);
+  }
+  return urls;
+}
+
+Future<bool> uploadItem(
+    String ownerId,
+    String ownerName,
+    Map ownerContact,
+    String title,
+    String description,
+    List<String> imageLinks,
+    String itemType,
+    String category) async {
+  var db = FirebaseFirestore.instance;
+  var col = db.collection(config.feedCollectionName);
+
+  Map<String, dynamic> info = {};
+  info["title"] = title;
+  info["description"] = description;
+  info["images"] = imageLinks;
+  info["item_type"] = itemType;
+  info["category"] = category;
+
+  info["owner_id"] = ownerId;
+  info["owner_name"] = ownerName;
+  info["owner_contact"] = ownerContact;
+
+  try {
+    await col.add(info);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+Future<bool> deleteItem(String itemId) async {
+  var db = FirebaseFirestore.instance;
+  var col = db.collection(config.feedCollectionName);
+
+  try {
+    await col.doc(itemId).delete();
+    return true;
+  } catch (e) {
+    return false;
+  }
 }

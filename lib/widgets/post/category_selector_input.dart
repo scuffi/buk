@@ -1,4 +1,4 @@
-import 'package:buk/providers/post/category_provider.dart';
+import 'package:buk/providers/post/post_form_provider.dart';
 import 'package:buk/widgets/feed/interface/category_type.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +54,7 @@ class PostCategoryForm extends StatelessWidget {
                           .toCapitalized(),
                     ),
                     onPressed: () => {
-                      Provider.of<CategoryProvider>(context, listen: false)
+                      Provider.of<PostFormProvider>(context, listen: false)
                           .setCategory(ItemCategory.values[index]),
                       Navigator.pop(context),
                     },
@@ -73,7 +73,7 @@ class PostCategoryForm extends StatelessWidget {
                 //       .toCapitalized(),
                 //   selectable: false,
                 // ),
-                Text(Provider.of<CategoryProvider>(context)
+                Text(Provider.of<PostFormProvider>(context)
                     .category
                     .toCapitalized()),
                 const Icon(
