@@ -1,6 +1,7 @@
 import 'package:buk/api/feed_api.dart';
 import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
+import 'package:buk/widgets/feed/sub/like_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -78,13 +79,8 @@ class ItemHeader extends StatelessWidget {
                       },
                     ),
                   )
-                : const SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Icon(
-                      Icons.bookmark_outline,
-                      color: Colors.black87,
-                    ),
+                : BookmarkButton(
+                    item: info,
                   ),
       ],
     );

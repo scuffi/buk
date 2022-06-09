@@ -13,6 +13,7 @@ class FeedLoading extends StatelessWidget {
       children: [
         FeedItem(
           info: ItemData(
+              timestamp: null,
               id: "",
               title: "",
               description: "",
@@ -25,6 +26,7 @@ class FeedLoading extends StatelessWidget {
         ),
         FeedItem(
           info: ItemData(
+              timestamp: null,
               id: "",
               title: "",
               description: "",
@@ -37,6 +39,7 @@ class FeedLoading extends StatelessWidget {
         ),
         FeedItem(
           info: ItemData(
+              timestamp: null,
               id: "",
               title: "",
               description: "",

@@ -1,11 +1,13 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:buk/api/feed_api.dart';
+import 'package:buk/api/user_api.dart';
 import 'package:buk/pages/post_page.dart';
+import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/providers/initial/initial_provider.dart';
 import 'package:buk/providers/user_provider.dart';
-import 'package:buk/widgets/feed/feed_empty.dart';
 import 'package:buk/widgets/feed/feed_offer.dart';
 import 'package:buk/widgets/feed/feed_request.dart';
+import 'package:buk/widgets/feed/liked_feed.dart';
 import 'package:buk/widgets/translate/language_switch.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +15,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 class FeedPage extends StatefulWidget {
-  const FeedPage({Key? key, required this.user}) : super(key: key);
-
-  final User user;
+  const FeedPage({Key? key}) : super(key: key);
 
   @override
   State<FeedPage> createState() => _FeedPageState();
@@ -33,9 +33,29 @@ class _FeedPageState extends State<FeedPage>
 
     Future.delayed(
       const Duration(seconds: 0),
-      () {
-        Provider.of<UserProvider>(context, listen: false).setUser(widget.user);
-        updateFeeds(context);
+      () async {
+        var provider = Provider.of<UserProvider>(context, listen: false);
+
+        List<String>? likes = await getUserLikes(provider.user!);
+        if (likes != null) {
+          provider.defaultAddLikes(likes);
+        }
+
+        await updateFeeds(context);
+
+        if (likes != null) {
+          // Iterate over EXISTING items, if the liked list contains an item that doesn't exist, add it to be later removed from that users likes
+          var feedIds = Provider.of<FeedData>(context, listen: false)
+              .fullFeed
+              .map((e) => e.id)
+              .toList();
+
+          likes.retainWhere(
+            (element) => !feedIds.contains(element),
+          );
+
+          removeUserLikes(provider.user!, likes);
+        }
       },
     );
   }
@@ -116,7 +136,7 @@ class _FeedPageState extends State<FeedPage>
             },
             child: const OfferFeed(),
           ),
-          const FeedEmpty(),
+          const LikedFeed(),
         ],
       ),
       floatingActionButton: FloatingActionButton(

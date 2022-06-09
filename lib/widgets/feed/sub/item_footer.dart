@@ -7,6 +7,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import 'package:timeago/timeago.dart' as timeago;
+
 import '../../translate/translate_text.dart';
 
 class ItemFooter extends StatelessWidget {
@@ -40,9 +42,22 @@ class ItemFooter extends StatelessWidget {
                 highlightColor: Colors.grey[100]!,
                 child:
                     Container(width: 165, height: 30, color: Colors.grey[300]))
-            : SelectableText(
-                info.owner_name,
-                style: GoogleFonts.lato(fontSize: 15, color: Colors.black87),
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SelectableText(
+                    info.owner_name,
+                    style:
+                        GoogleFonts.lato(fontSize: 15, color: Colors.black87),
+                  ),
+                  SelectableText(
+                    timeago.format(DateTime.fromMillisecondsSinceEpoch(
+                        info.timestamp!.millisecondsSinceEpoch)),
+                    style: GoogleFonts.lato(
+                        textStyle:
+                            TextStyle(fontSize: 12, color: Colors.grey[850])),
+                  )
+                ],
               ),
         const Spacer(),
         Padding(

@@ -1,4 +1,5 @@
 import 'package:buk/widgets/feed/interface/category_type.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ItemData {
   String id;
@@ -13,6 +14,8 @@ class ItemData {
 
   String item_type;
 
+  Timestamp? timestamp;
+
   ItemData({
     required this.id,
     required this.title,
@@ -22,6 +25,7 @@ class ItemData {
     required this.owner_name,
     required this.owner_id,
     required this.owner_contact,
+    required this.timestamp,
     this.item_type = "request",
   });
 }

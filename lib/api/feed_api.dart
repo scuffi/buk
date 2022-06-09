@@ -8,13 +8,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../widgets/feed/interface/item_data.dart';
 
 import 'package:buk/config.dart' as config;
 
-void updateFeeds(BuildContext context) {
+Future<void> updateFeeds(BuildContext context) async {
   // Set loading status
   final loader = Provider.of<FeedLoader>(context, listen: false);
   final feed = Provider.of<FeedData>(context, listen: false);
@@ -23,56 +22,30 @@ void updateFeeds(BuildContext context) {
 
   feed.clearAll();
 
-  _fetchFeedItems().then((items) {
-    // Iterate through List<ItemData>
-    for (var item in items) {
-      // Put items into correct types
+  var items = await _fetchFeedItems();
+  // Iterate through List<ItemData>
+  for (var item in items) {
+    // Put items into correct types
 
-      if (item.item_type == "request") {
-        feed.addRequestItem(item);
-      } else if (item.item_type == "offer") {
-        feed.addOfferItem(item);
-      }
+    if (item.item_type == "request") {
+      feed.addRequestItem(item);
+    } else if (item.item_type == "offer") {
+      feed.addOfferItem(item);
     }
-
-    loader.setLoaded(true);
-  });
-}
-
-Future<bool> createUserInDb(User user) async {
-  var db = FirebaseFirestore.instance;
-  var col = db.collection(config.userCollectionName);
-
-  var input = {
-    "likes": [],
-    "user_id": user.uid,
-  };
-
-  try {
-    await col.add(input);
-    return true;
-  } catch (e) {
-    print(e);
-    return false;
   }
-}
 
-Future<bool> userExistsInDb(User user) async {
-  var db = FirebaseFirestore.instance.collection(config.userCollectionName);
-
-  var snapshot = await db
-      .where(FieldPath.fromString('user_id'), isEqualTo: user.uid)
-      .limit(1)
-      .get();
-
-  return snapshot.docs.isNotEmpty;
+  loader.setLoaded(true);
 }
 
 Future<List<ItemData>> _fetchFeedItems() async {
   var db = FirebaseFirestore.instance;
   List<ItemData> data = List.empty(growable: true);
 
-  await db.collection(config.feedCollectionName).get().then((event) {
+  await db
+      .collection(config.feedCollectionName)
+      .orderBy("timestamp", descending: true)
+      .get()
+      .then((event) {
     for (var doc in event.docs) {
       data.add(ItemData(
         id: doc.id,
@@ -84,6 +57,7 @@ Future<List<ItemData>> _fetchFeedItems() async {
         owner_id: doc.get("owner_id"),
         owner_contact: doc.get("owner_contact"),
         item_type: doc.get("item_type"),
+        timestamp: doc.get("timestamp"),
       ));
     }
   });
@@ -130,6 +104,9 @@ Future<bool> uploadItem(
   info["owner_id"] = ownerId;
   info["owner_name"] = ownerName;
   info["owner_contact"] = ownerContact;
+
+  info["timestamp"] = FieldValue.serverTimestamp();
+  // info["timestamp"] = Timestamp.now().millisecondsSinceEpoch;
 
   try {
     await col.add(info);

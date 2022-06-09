@@ -1,7 +1,9 @@
-import 'package:buk/api/feed_api.dart';
+import 'package:buk/api/user_api.dart';
 import 'package:buk/pages/feed_page.dart';
+import 'package:buk/pages/fullscreen_loading.dart';
 import 'package:buk/pages/initial_input.dart';
 import 'package:buk/providers/initial/initial_provider.dart';
+import 'package:buk/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterfire_ui/auth.dart';
@@ -34,10 +36,17 @@ class _AuthGateState extends State<AuthGate> {
             }
           });
 
+          Future.delayed(const Duration(seconds: 1), () {
+            var provider = Provider.of<UserProvider>(context, listen: false);
+            provider.setUser(snapshot.data!);
+          });
+
           return (snapshot.data!.displayName != null &&
                       snapshot.data!.displayName != "") ||
                   Provider.of<InitialProvider>(context).passed
-              ? FeedPage(user: snapshot.data!)
+              ? Provider.of<UserProvider>(context).user == null
+                  ? const FullScreenLoader()
+                  : const FeedPage()
               : InputPage(snapshot.data!);
         });
   }
