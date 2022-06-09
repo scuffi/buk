@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
+import 'package:buk/util/extensions.dart';
+
 class PostCategoryForm extends StatelessWidget {
   const PostCategoryForm({Key? key}) : super(key: key);
 
@@ -87,9 +89,4 @@ class PostCategoryForm extends StatelessWidget {
       ],
     );
   }
-}
-
-extension StringCasingExtension on String {
-  String toCapitalized() =>
-      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
 }

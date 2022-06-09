@@ -55,7 +55,7 @@ class ItemFooter extends StatelessWidget {
                         info.timestamp!.millisecondsSinceEpoch)),
                     style: GoogleFonts.lato(
                         textStyle:
-                            TextStyle(fontSize: 12, color: Colors.grey[850])),
+                            TextStyle(fontSize: 12, color: Colors.grey[600])),
                   )
                 ],
               ),
