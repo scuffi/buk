@@ -58,8 +58,11 @@ class ItemHeader extends StatelessWidget {
                           children: [
                             Container(
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 4.0, right: 4),
+                                padding: const EdgeInsets.only(
+                                    left: 8.0,
+                                    right: 6.0,
+                                    top: 2.0,
+                                    bottom: 2.0),
                                 child: TranslateText(
                                   text: info.item_type == "request"
                                       ? "Requesting"
@@ -76,11 +79,11 @@ class ItemHeader extends StatelessWidget {
                                     ? config.requestColour.withOpacity(0.1)
                                     : config.offerColour.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                    color: info.item_type == "request"
-                                        ? config.requestColour
-                                        : config.offerColour,
-                                    width: 3),
+                                // border: Border.all(
+                                //     color: info.item_type == "request"
+                                //         ? config.requestColour
+                                //         : config.offerColour,
+                                //     width: 3),
                               ),
                             ),
                             Padding(
@@ -88,7 +91,10 @@ class ItemHeader extends StatelessWidget {
                               child: Container(
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 4.0, right: 4),
+                                      left: 8.0,
+                                      right: 6.0,
+                                      top: 2.0,
+                                      bottom: 2.0),
                                   child: TranslateText(
                                     text: info.category.name.toCapitalized(),
                                     style: GoogleFonts.poppins(
@@ -99,8 +105,8 @@ class ItemHeader extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   color: config.categoryColour.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                      color: config.categoryColour, width: 3),
+                                  // border: Border.all(
+                                  //     color: config.categoryColour, width: 3),
                                 ),
                               ),
                             ),
