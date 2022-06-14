@@ -39,19 +39,19 @@ class _PostPageState extends State<PostPage> {
         //     Provider.of<PickerProvider>(context, listen: false).clearImages();
         //   },
         // ),
-        body: Stack(children: [
-          Container(
-            color: Colors.white,
-          ),
-          GestureDetector(
-            onTap: () {
-              FocusScopeNode currentFocus = FocusScope.of(context);
+        body: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
 
-              if (!currentFocus.hasPrimaryFocus) {
-                currentFocus.unfocus();
-              }
-            },
-            child: Column(
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: Stack(children: [
+            Container(
+              color: Colors.white,
+            ),
+            Column(
               children: [
                 Align(
                   alignment: Alignment.topCenter,
@@ -253,8 +253,8 @@ class _PostPageState extends State<PostPage> {
                 )
               ],
             ),
-          ),
-        ]));
+          ]),
+        ));
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,6 @@ class _BookmarkButtonState extends State<BookmarkButton> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     defaultChecked =
         Provider.of<UserProvider>(context, listen: false).hasLiked(widget.item);
@@ -39,10 +39,11 @@ class _BookmarkButtonState extends State<BookmarkButton> {
         },
         onTap: (liked) async {
           var user = Provider.of<UserProvider>(context, listen: false);
+          var feed = Provider.of<FeedData>(context, listen: false);
 
           bool success = liked
               ? await user.removeLike(widget.item)
-              : await user.addLike(widget.item);
+              : await user.addLike(widget.item, feed);
 
           return success ? !liked : liked;
         },

@@ -6,7 +6,7 @@ var feedCollectionName = "feed";
 var userCollectionName = "users";
 
 // ? Options
-var likeStayOnPageOnUnlike = true;
+var likeStayOnPageOnUnlike = false;
 
 // ? Colours
 var categoryColour = Colors.purple;

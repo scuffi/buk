@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:buk/providers/language/language_enum.dart';
 import 'package:buk/providers/language/language_provider.dart';
+import 'package:buk/widgets/translate/translate_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -30,69 +29,57 @@ class TranslateText extends StatefulWidget {
 }
 
 class _TranslateTextState extends State<TranslateText> {
-  final Map translations = {};
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    translations["default"] = widget.text;
-
-    if (widget.ukrainian == null) {
-      translate(LanguageType.uk, translations["default"]).then((value) {
-        if (!mounted) return;
-
-        setState(() {
-          if (!mounted) return;
-          translations[LanguageType.uk] =
-              utf8.decode(utf8.encode(value.toString()));
-        });
-      });
-    } else {
-      translations[LanguageType.uk] = widget.ukrainian;
-    }
-
-    if (widget.english == null) {
-      translate(LanguageType.en, translations["default"]).then((value) {
-        if (!mounted) return;
-
-        setState(() {
-          translations[LanguageType.en] = value.toString();
-        });
-      });
-    } else {
-      translations[LanguageType.en] = widget.english;
-    }
-  }
+  String? currentTranslation;
 
   @override
   Widget build(BuildContext context) {
-    return translations.containsKey(Provider.of<Language>(context).language)
-        ? widget.selectable
-            ? SelectableText(
-                translations[Provider.of<Language>(context).language],
-                style: widget.style,
-                textAlign: widget.textAlign,
-              )
-            : Text(
-                translations[Provider.of<Language>(context).language],
-                style: widget.style,
-                textAlign: widget.textAlign,
-              )
-        : Shimmer.fromColors(
-            child: Container(
-                color: Colors.grey[300], child: Text(translations["default"])),
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!);
+    translate(
+            Provider.of<Language>(context, listen: true).language, widget.text)
+        .then((value) {
+      if (!mounted) return;
+
+      setState(() {
+        currentTranslation = value;
+      });
+    });
+
+    return Consumer<Language>(
+      builder: ((context, value, child) {
+        return currentTranslation != null
+            ? widget.selectable
+                ? SelectableText(
+                    currentTranslation!,
+                    style: widget.style,
+                    textAlign: widget.textAlign,
+                  )
+                : Text(
+                    currentTranslation!,
+                    style: widget.style,
+                    textAlign: widget.textAlign,
+                  )
+            : Shimmer.fromColors(
+                child: Container(
+                    color: Colors.grey[300], child: Text(widget.text)),
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!);
+      }),
+    );
   }
 
-  Future<Translation> translate(LanguageType to, String text) async {
+  Future<String> translate(LanguageType to, String text) async {
+    // Check if this string has already been translated in the cache
+    var cached = TranslateCache.check(text, to);
+    if (cached != null) {
+      return cached;
+    }
+
     final translator = GoogleTranslator();
-    return await translator.translate(text, to: to.toString().split('.').last);
+    var translation =
+        await translator.translate(text, to: to.toString().split('.').last);
+
+    // Add to cache so next translation is faster and doesn't require a request
+    TranslateCache.addCache(text, translation.text, to);
+
+    return text;
   }
 }

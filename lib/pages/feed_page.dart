@@ -1,8 +1,6 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:buk/api/feed_api.dart';
-import 'package:buk/api/user_api.dart';
 import 'package:buk/pages/post_page.dart';
-import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/providers/initial/initial_provider.dart';
 import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/feed/feed_offer.dart';
@@ -36,26 +34,26 @@ class _FeedPageState extends State<FeedPage>
       () async {
         var provider = Provider.of<UserProvider>(context, listen: false);
 
-        List<String>? likes = await getUserLikes(provider.user!);
-        if (likes != null) {
-          provider.defaultAddLikes(likes);
-        }
+        // List<String>? likes = await getUserLikes(provider.user!);
+        // if (likes != null) {
+        //   provider.defaultAddLikes(likes);
+        // }
 
-        await updateFeeds(context);
+        // await updateFeeds(context);
 
-        if (likes != null) {
-          // Iterate over EXISTING items, if the liked list contains an item that doesn't exist, add it to be later removed from that users likes
-          var feedIds = Provider.of<FeedData>(context, listen: false)
-              .fullFeed
-              .map((e) => e.id)
-              .toList();
+        // if (likes != null) {
+        //   // Iterate over EXISTING items, if the liked list contains an item that doesn't exist, add it to be later removed from that users likes
+        //   var feedIds = Provider.of<FeedData>(context, listen: false)
+        //       .fullFeed
+        //       .map((e) => e.id)
+        //       .toList();
 
-          likes.retainWhere(
-            (element) => !feedIds.contains(element),
-          );
+        //   likes.retainWhere(
+        //     (element) => !feedIds.contains(element),
+        //   );
 
-          removeUserLikes(provider.user!, likes);
-        }
+        //   removeUserLikes(provider.user!, likes);
+        // }
       },
     );
   }

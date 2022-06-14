@@ -59,6 +59,7 @@ dependencies:
   share_plus: ^4.0.7
   like_button: ^2.0.4
   timeago: ^3.2.2
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

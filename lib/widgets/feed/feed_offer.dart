@@ -1,5 +1,6 @@
 import 'package:buk/widgets/feed/feed_empty.dart';
 import 'package:buk/widgets/feed/feed_item.dart';
+import 'package:buk/widgets/feed/sub/category_switcher.dart';
 import 'package:buk/widgets/feed_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,16 +15,31 @@ class OfferFeed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<FeedLoader>(
       builder: (_, loader, __) => loader.loaded
-          ? Consumer<FeedData>(
-              builder: (_, data, __) => data.offerItems.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: data.offerItems.length,
-                      itemBuilder: (_, index) {
-                        return FeedItem(info: data.offerItems[index]);
-                      },
-                    )
-                  : const FeedEmpty(),
+          ? // Consumer<FeedData>(
+          //     builder: (_, data, __) {
+          Column(
+              children: [
+                CategorySwitcher(
+                  type: "offer",
+                ),
+                Provider.of<FeedData>(context).sortedOfferFeed().isNotEmpty
+                    ? Expanded(
+                        child: ListView.builder(
+                          itemCount: Provider.of<FeedData>(context)
+                              .sortedOfferFeed()
+                              .length,
+                          itemBuilder: (_, index) {
+                            return FeedItem(
+                                info: Provider.of<FeedData>(context)
+                                    .sortedOfferFeed()[index]);
+                          },
+                        ),
+                      )
+                    : const FeedEmpty(),
+              ],
             )
+          //   },
+          // )
           : const FeedLoading(),
     );
   }

@@ -116,7 +116,7 @@ Future<bool> removeUserLike(User user, ItemData item) async {
   }
 }
 
-Future<bool> removeUserLikes(User user, List<String> likeIds) async {
+Future<bool> removeUserLikes(User user, List<ItemData> likeItems) async {
   var userDoc = await getUserDocument(user);
   if (userDoc == null) {
     return false;
@@ -133,7 +133,9 @@ Future<bool> removeUserLikes(User user, List<String> likeIds) async {
     return true;
   }
 
-  var likes = List.from(data["likes"]);
+  var likeIds = likeItems.map((e) => e.id).toList();
+
+  var likes = List<String>.from(data["likes"]);
   likes.removeWhere(((element) => likeIds.contains(element)));
 
   data["likes"] = likes;

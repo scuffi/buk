@@ -2,6 +2,7 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/language/language_enum.dart';
 import '../../providers/language/language_provider.dart';
@@ -39,21 +40,33 @@ class _LanguageSwitchState extends State<LanguageSwitch> {
     // );
 
     return AnimatedToggleSwitch<bool>.rolling(
-      current: positive,
+      current: Provider.of<Language>(context).language == LanguageType.en,
       values: const [true, false],
-      onTap: () {
+      onTap: () async {
         setState(() {
           positive = !positive;
         });
         Provider.of<Language>(context, listen: false)
             .setLang(positive ? LanguageType.en : LanguageType.uk);
+
+        // Add to storage so it saves on restart
+        final prefs = await SharedPreferences.getInstance();
+
+        await prefs.setString(
+            "language", positive ? LanguageType.en.name : LanguageType.uk.name);
       },
-      onChanged: (i) {
+      onChanged: (i) async {
         setState(() {
           positive = i;
         });
         Provider.of<Language>(context, listen: false)
             .setLang(positive ? LanguageType.en : LanguageType.uk);
+
+        // Add to storage so it saves on restart
+        final prefs = await SharedPreferences.getInstance();
+
+        await prefs.setString(
+            "language", positive ? LanguageType.en.name : LanguageType.uk.name);
       },
       iconBuilder: (lang, size, foreGround) {
         return Padding(

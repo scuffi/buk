@@ -28,4 +28,10 @@ class ItemData {
     required this.timestamp,
     this.item_type = "request",
   });
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return {"title": title}.toString();
+  }
 }
