@@ -25,6 +25,7 @@ class OfferFeed extends StatelessWidget {
                 Provider.of<FeedData>(context).sortedOfferFeed().isNotEmpty
                     ? Expanded(
                         child: ListView.builder(
+                          physics: const ClampingScrollPhysics(),
                           itemCount: Provider.of<FeedData>(context)
                               .sortedOfferFeed()
                               .length,
@@ -37,6 +38,7 @@ class OfferFeed extends StatelessWidget {
                       )
                     : Expanded(
                         child: ListView(
+                          physics: const ClampingScrollPhysics(),
                           children: const [
                             SizedBox(height: 550, child: FeedEmpty())
                           ],

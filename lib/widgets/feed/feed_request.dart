@@ -26,6 +26,7 @@ class RequestFeed extends StatelessWidget {
                     data.sortedRequestFeed().isNotEmpty
                         ? Expanded(
                             child: ListView.builder(
+                              physics: const ClampingScrollPhysics(),
                               itemCount: data.sortedRequestFeed().length,
                               itemBuilder: (_, index) => FeedItem(
                                   info: data.sortedRequestFeed()[index]),
@@ -33,6 +34,7 @@ class RequestFeed extends StatelessWidget {
                           )
                         : Expanded(
                             child: ListView(
+                              physics: const ClampingScrollPhysics(),
                               children: const [
                                 SizedBox(height: 550, child: FeedEmpty())
                               ],
