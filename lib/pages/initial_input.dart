@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:buk/providers/initial/initial_provider.dart';
+import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/translate/language_switch.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
@@ -184,7 +185,9 @@ class _InputPageState extends State<InputPage> {
                     TextButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          widget.data
+                          await Provider.of<UserProvider>(context,
+                                  listen: false)
+                              .user!
                               .updateDisplayName(Provider.of<InitialProvider>(
                                       context,
                                       listen: false)
@@ -192,6 +195,15 @@ class _InputPageState extends State<InputPage> {
                               .catchError((err) {
                             print(err);
                           });
+
+                          await Provider.of<UserProvider>(context,
+                                  listen: false)
+                              .user!
+                              .reload();
+
+                          Provider.of<UserProvider>(context, listen: false)
+                              .setUser(FirebaseAuth.instance.currentUser!);
+
                           Provider.of<InitialProvider>(context, listen: false)
                               .setPassed(true);
                           // TODO: Add language to local storage so we can default to it each time app starts up

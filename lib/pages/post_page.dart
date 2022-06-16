@@ -198,11 +198,46 @@ class _PostPageState extends State<PostPage> {
                                   listen: false);
                               var item = Provider.of<PostFormProvider>(context,
                                   listen: false);
-                              var id = const Uuid().v4();
+
+                              showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return Dialog(
+                                      backgroundColor: Colors.blue.shade50,
+                                      child: SizedBox(
+                                        height: 200,
+                                        width: 350,
+                                        child: Column(children: [
+                                          const Spacer(),
+                                          const Padding(
+                                            padding:
+                                                EdgeInsets.only(bottom: 4.0),
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 4.0),
+                                            child: TranslateText(
+                                              text: "Posting ${item.title!}",
+                                              style: GoogleFonts.poppins(
+                                                  textStyle: const TextStyle(
+                                                      fontSize: 18)),
+                                            ),
+                                          ),
+                                          const Spacer(),
+                                        ]),
+                                      ),
+                                    );
+                                  });
+
+                              String? id = const Uuid().v4();
 
                               List<String> images = [];
                               if (item.images.isNotEmpty) {
                                 images = await uploadImages(item.images, id);
+                              } else {
+                                id = null;
                               }
 
                               String userId = user.user!.uid;
@@ -216,6 +251,18 @@ class _PostPageState extends State<PostPage> {
                               String itemType = item.type;
                               String category = item.category;
 
+                              print("""
+Category: $category,
+Description: $description,
+Title: $title,
+Type: $itemType,
+Images: $images,
+Owner contact: $userContact,
+Image location: $id,
+Owner name: $userName,
+Owner ID: $userId,
+""");
+
                               await uploadItem(
                                   userId,
                                   userName,
@@ -223,6 +270,7 @@ class _PostPageState extends State<PostPage> {
                                   title,
                                   description,
                                   images,
+                                  id,
                                   itemType,
                                   category);
                               print("Uploaded new item");
@@ -233,6 +281,7 @@ class _PostPageState extends State<PostPage> {
                                 updateFeeds(context);
                               });
 
+                              Navigator.pop(context);
                               Navigator.pop(context);
                             }
                           },

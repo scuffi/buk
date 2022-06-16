@@ -18,8 +18,9 @@ class RequestFeed extends StatelessWidget {
           ? Consumer<FeedData>(
               builder: (_, data, __) {
                 return Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    CategorySwitcher(
+                    const CategorySwitcher(
                       type: "request",
                     ),
                     data.sortedRequestFeed().isNotEmpty
@@ -30,7 +31,13 @@ class RequestFeed extends StatelessWidget {
                                   info: data.sortedRequestFeed()[index]),
                             ),
                           )
-                        : const FeedEmpty(),
+                        : Expanded(
+                            child: ListView(
+                              children: const [
+                                SizedBox(height: 550, child: FeedEmpty())
+                              ],
+                            ),
+                          ),
                   ],
                 );
               },

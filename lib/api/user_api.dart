@@ -1,3 +1,4 @@
+import 'package:buk/api/feed_api.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -166,4 +167,41 @@ Future<List<String>?> getUserLikes(User user) async {
   }
 
   return List.from(data["likes"]);
+}
+
+Future<bool> deleteEverything(User user) async {
+  try {
+    var db = FirebaseFirestore.instance;
+
+    var userDoc = await getUserDocument(user);
+    if (userDoc != null) {
+      await userDoc.delete();
+    }
+
+    print("deleted user doc");
+
+    var items = await getAllUserItems(user);
+    print("All users items: $items");
+
+    for (var element in items.docs) {
+      await deleteItem(element.id, element.data()["image_location"]);
+    }
+
+    print("deleted items");
+
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
+
+Future<QuerySnapshot<Map<String, dynamic>>> getAllUserItems(User user) async {
+  var db = FirebaseFirestore.instance;
+  print(
+      "Fetching items with userId ${await db.collection(config.feedCollectionName).where("owner_id", isEqualTo: user.uid).get()}");
+  return await db
+      .collection(config.feedCollectionName)
+      .where("owner_id", isEqualTo: user.uid)
+      .get();
 }

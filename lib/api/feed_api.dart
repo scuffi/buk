@@ -52,6 +52,7 @@ Future<List<ItemData>> _fetchFeedItems() async {
         title: doc.get("title"),
         description: doc.get("description"),
         images: doc.get("images"),
+        image_location: doc.get("image_location"),
         category: ItemCategory.values.asNameMap()[doc.get("category")]!,
         owner_name: doc.get("owner_name"),
         owner_id: doc.get("owner_id"),
@@ -89,6 +90,7 @@ Future<bool> uploadItem(
     String title,
     String description,
     List<String> imageLinks,
+    String? imageLocationHash,
     String itemType,
     String category) async {
   var db = FirebaseFirestore.instance;
@@ -98,6 +100,7 @@ Future<bool> uploadItem(
   info["title"] = title;
   info["description"] = description;
   info["images"] = imageLinks;
+  info["image_location"] = imageLocationHash;
   info["item_type"] = itemType;
   info["category"] = category;
 
@@ -116,8 +119,22 @@ Future<bool> uploadItem(
   }
 }
 
-Future<bool> deleteItem(String itemId) async {
+Future<bool> deleteItem(String itemId, String? imageLocation) async {
   var db = FirebaseFirestore.instance;
+
+  // Check if image location is valid, if it is we can then try delete the location
+  if (imageLocation != null) {
+    await FirebaseStorage.instance
+        .ref("images/$imageLocation")
+        .listAll()
+        .then((value) {
+      for (var element in value.items) {
+        FirebaseStorage.instance.ref(element.fullPath).delete();
+      }
+    });
+  }
+
+  // Get the feed collection
   var col = db.collection(config.feedCollectionName);
 
   try {

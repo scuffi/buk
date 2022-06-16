@@ -60,6 +60,8 @@ dependencies:
   like_button: ^2.0.4
   timeago: ^3.2.2
   shared_preferences: ^2.0.15
+  flutter_neumorphic: ^3.2.0
+  liquid_pull_to_refresh: ^3.0.1
 
 dev_dependencies:
   flutter_test:

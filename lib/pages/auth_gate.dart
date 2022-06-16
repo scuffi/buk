@@ -1,8 +1,8 @@
 import 'package:buk/api/feed_api.dart';
 import 'package:buk/api/user_api.dart';
-import 'package:buk/pages/feed_page.dart';
 import 'package:buk/pages/fullscreen_loading.dart';
 import 'package:buk/pages/initial_input.dart';
+import 'package:buk/pages/main_page.dart';
 import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/providers/initial/initial_provider.dart';
 import 'package:buk/providers/user_provider.dart';
@@ -95,7 +95,7 @@ class _AuthGateState extends State<AuthGate> {
                   Provider.of<InitialProvider>(context).passed
               ? !loaded
                   ? const FullScreenLoader()
-                  : const FeedPage()
+                  : const MainPage()
               : InputPage(snapshot.data!);
         });
   }

@@ -5,6 +5,8 @@ import 'package:buk/providers/initial/initial_provider.dart';
 import 'package:buk/providers/language/language_enum.dart';
 import 'package:buk/providers/language/language_provider.dart';
 import 'package:buk/providers/post/post_form_provider.dart';
+import 'package:buk/providers/screen/screen_provider.dart';
+import 'package:buk/providers/settings_provider.dart';
 import 'package:buk/providers/user_provider.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,6 +20,8 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        // ? Screen handler provider
+        ChangeNotifierProvider(create: (_) => Screen()),
         // ? Initial input provider
         ChangeNotifierProvider(create: (_) => InitialProvider()),
         // ? User storage provider
@@ -29,6 +33,8 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => Language()),
         // ? Post page providers
         ChangeNotifierProvider(create: (context) => PostFormProvider()),
+        // ? Settings provider
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
       ],
       // child: DevicePreview(
       //   enabled: !kReleaseMode,

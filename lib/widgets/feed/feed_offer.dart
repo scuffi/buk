@@ -19,7 +19,7 @@ class OfferFeed extends StatelessWidget {
           //     builder: (_, data, __) {
           Column(
               children: [
-                CategorySwitcher(
+                const CategorySwitcher(
                   type: "offer",
                 ),
                 Provider.of<FeedData>(context).sortedOfferFeed().isNotEmpty
@@ -35,7 +35,13 @@ class OfferFeed extends StatelessWidget {
                           },
                         ),
                       )
-                    : const FeedEmpty(),
+                    : Expanded(
+                        child: ListView(
+                          children: const [
+                            SizedBox(height: 550, child: FeedEmpty())
+                          ],
+                        ),
+                      ),
               ],
             )
           //   },

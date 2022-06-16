@@ -7,43 +7,41 @@ class FeedEmpty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          const Spacer(),
-          Center(
-            child: GradientText(
-              "Oh no!",
-              colors: [Colors.purple[900]!, Colors.pinkAccent],
-              style: GoogleFonts.lato(
-                textStyle: const TextStyle(
-                    fontSize: 100.0, fontWeight: FontWeight.bold),
-              ),
+    return Column(
+      children: [
+        const Spacer(),
+        Center(
+          child: GradientText(
+            "Oh no!",
+            colors: [Colors.purple[900]!, Colors.pinkAccent],
+            style: GoogleFonts.lato(
+              textStyle:
+                  const TextStyle(fontSize: 100.0, fontWeight: FontWeight.bold),
             ),
           ),
-          Center(
-            child: SizedBox(
-              width: 300,
-              child: Text(
-                "It looks like nothing is here, why don't you create a post to make it less empty?",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.lato(
-                    textStyle: const TextStyle(fontSize: 22.0)),
-              ),
+        ),
+        Center(
+          child: SizedBox(
+            width: 300,
+            child: Text(
+              "It looks like nothing is here, why don't you create a post to make it less empty?",
+              textAlign: TextAlign.center,
+              style:
+                  GoogleFonts.lato(textStyle: const TextStyle(fontSize: 22.0)),
             ),
           ),
-          // const Spacer(),
-          const Padding(
-            padding: EdgeInsets.only(bottom: 50.0, top: 60.0),
-            child: Center(
-              child: Icon(
-                Icons.arrow_downward_rounded,
-                size: 96,
-              ),
+        ),
+        // const Spacer(),
+        const Padding(
+          padding: EdgeInsets.only(bottom: 50.0, top: 60.0),
+          child: Center(
+            child: Icon(
+              Icons.arrow_downward_rounded,
+              size: 96,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

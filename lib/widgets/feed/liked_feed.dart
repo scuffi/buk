@@ -15,8 +15,6 @@ class LikedFeed extends StatelessWidget {
       builder: (_, loader, __) => loader.loaded
           ? Consumer<UserProvider>(
               builder: (_, data, __) {
-                print("Updating likes list");
-
                 // var usableFeed = data.fullFeed
                 //     .where((element) => likeList.contains(element.id))
                 //     .toList();

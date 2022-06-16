@@ -6,6 +6,7 @@ class ItemData {
   String title;
   String description;
   List<dynamic> images;
+  String? image_location;
   ItemCategory category;
 
   String owner_name;
@@ -21,6 +22,7 @@ class ItemData {
     required this.title,
     required this.description,
     required this.images,
+    required this.image_location,
     required this.category,
     required this.owner_name,
     required this.owner_id,
