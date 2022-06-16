@@ -35,7 +35,7 @@ class _AuthGateState extends State<AuthGate> {
             firstIteration = true;
             return const SignInScreen(
               providerConfigs: [
-                EmailProviderConfiguration(),
+                // EmailProviderConfiguration(),
                 PhoneProviderConfiguration(),
               ],
             );

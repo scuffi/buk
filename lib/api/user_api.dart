@@ -205,3 +205,22 @@ Future<QuerySnapshot<Map<String, dynamic>>> getAllUserItems(User user) async {
       .where("owner_id", isEqualTo: user.uid)
       .get();
 }
+
+Future<void> setUserDisplayName(User user, String name) async {
+  var doc = await getUserDocument(user);
+  if (doc != null) {
+    var input = {"likes": [], "user_id": user.uid, "display_name": name};
+
+    await doc.set(input);
+  }
+}
+
+Future<bool> displayNameAvailable(String name) async {
+  var db = FirebaseFirestore.instance;
+  var docs = await db
+      .collection(config.userCollectionName)
+      .where("display_name", isEqualTo: name)
+      .get();
+
+  return docs.size == 0;
+}

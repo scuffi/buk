@@ -245,7 +245,9 @@ class _PostPageState extends State<PostPage> {
                               String userName = user.user!.displayName!;
 
                               // ! Add phone number to this once added
-                              Map userContact = {"email": user.user!.email};
+                              Map userContact = {
+                                "phone": user.user!.phoneNumber
+                              };
 
                               String title = item.title!;
                               String description = item.description!;

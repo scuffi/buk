@@ -123,16 +123,16 @@ Future<bool> deleteItem(String itemId, String? imageLocation) async {
   var db = FirebaseFirestore.instance;
 
   // Check if image location is valid, if it is we can then try delete the location
-  if (imageLocation != null) {
-    await FirebaseStorage.instance
-        .ref("images/$imageLocation")
-        .listAll()
-        .then((value) {
-      for (var element in value.items) {
-        FirebaseStorage.instance.ref(element.fullPath).delete();
-      }
-    });
-  }
+  // if (imageLocation != null) {
+  //   await FirebaseStorage.instance
+  //       .ref("images/$imageLocation")
+  //       .listAll()
+  //       .then((value) {
+  //     for (var element in value.items) {
+  //       FirebaseStorage.instance.ref(element.fullPath).delete();
+  //     }
+  //   });
+  // }
 
   // Get the feed collection
   var col = db.collection(config.feedCollectionName);

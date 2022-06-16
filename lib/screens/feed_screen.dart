@@ -42,21 +42,21 @@ class _FeedScreenState extends State<FeedScreen>
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
         title: Row(
-          children: [
-            TextButton(
-              child: const Icon(
-                Icons.logout,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-                Provider.of<InitialProvider>(context, listen: false)
-                    .setPassed(false);
-                Provider.of<UserProvider>(context, listen: false).clearUser();
-              },
-            ),
-            const Spacer(),
-            const LanguageSwitch(),
+          children: const [
+            // TextButton(
+            //   child: const Icon(
+            //     Icons.logout,
+            //     color: Colors.white,
+            //   ),
+            //   onPressed: () {
+            //     FirebaseAuth.instance.signOut();
+            //     Provider.of<InitialProvider>(context, listen: false)
+            //         .setPassed(false);
+            //     Provider.of<UserProvider>(context, listen: false).clearUser();
+            //   },
+            // ),
+            Spacer(),
+            LanguageSwitch(),
           ],
         ),
         // shape: const RoundedRectangleBorder(

@@ -1,9 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:buk/api/user_api.dart';
 import 'package:buk/providers/initial/initial_provider.dart';
 import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/translate/language_switch.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +21,8 @@ class InputPage extends StatefulWidget {
 class _InputPageState extends State<InputPage> {
   final _formKey = GlobalKey<FormState>();
   bool langSwitch = true;
+  bool nameFormOpen = true;
+  bool inputError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +30,7 @@ class _InputPageState extends State<InputPage> {
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -103,10 +108,10 @@ class _InputPageState extends State<InputPage> {
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.grey.withOpacity(0.6),
-                            spreadRadius: 8,
-                            blurRadius: 6,
-                            offset: const Offset(0, 4)),
+                            color: Colors.grey.shade400.withOpacity(0.7),
+                            spreadRadius: 3,
+                            blurRadius: 2,
+                            offset: const Offset(0, 2)),
                       ]),
                   child: Column(
                     children: [
@@ -145,6 +150,10 @@ class _InputPageState extends State<InputPage> {
                           child: Form(
                             key: _formKey,
                             child: TextFormField(
+                              maxLength: 25,
+                              maxLengthEnforcement:
+                                  MaxLengthEnforcement.enforced,
+                              readOnly: !nameFormOpen,
                               enableSuggestions: false,
                               validator: (value) {
                                 if (value == null ||
@@ -153,18 +162,25 @@ class _InputPageState extends State<InputPage> {
                                     value.length < 3 ||
                                     value.length > 25) {
                                   return "Username must be between 3-25 characters";
-                                } else {
-                                  return null;
+                                } else if (inputError) {
+                                  return "Username already exists, try another one";
                                 }
+                                return null;
                               },
                               decoration: const InputDecoration(
                                 hintText: "Username",
                               ),
-                              onChanged: (val) {
+                              onChanged: (val) async {
+                                if (val.contains(" ")) {
+                                  val.replaceAll(" ", "");
+                                }
+                                setState(() {
+                                  inputError = false;
+                                });
                                 _formKey.currentState!.validate();
                                 Provider.of<InitialProvider>(context,
                                         listen: false)
-                                    .setUsername(val);
+                                    .setUsername(val.trim());
                               },
                             ),
                           ),
@@ -185,47 +201,72 @@ class _InputPageState extends State<InputPage> {
                     TextButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          await Provider.of<UserProvider>(context,
-                                  listen: false)
-                              .user!
-                              .updateDisplayName(Provider.of<InitialProvider>(
-                                      context,
-                                      listen: false)
-                                  .username)
-                              .catchError((err) {
-                            print(err);
+                          setState(() {
+                            nameFormOpen = false;
                           });
-
-                          await Provider.of<UserProvider>(context,
+                          String displayName = Provider.of<InitialProvider>(
+                                  context,
                                   listen: false)
-                              .user!
-                              .reload();
+                              .username;
+                          bool available =
+                              await displayNameAvailable(displayName);
+                          if (available) {
+                            // Set displayName in database
+                            await setUserDisplayName(
+                                Provider.of<UserProvider>(context,
+                                        listen: false)
+                                    .user!,
+                                displayName);
 
-                          Provider.of<UserProvider>(context, listen: false)
-                              .setUser(FirebaseAuth.instance.currentUser!);
+                            // Set display name in user auth
+                            await Provider.of<UserProvider>(context,
+                                    listen: false)
+                                .user!
+                                .updateDisplayName(displayName)
+                                .catchError((err) {
+                              print(err);
+                            });
 
-                          Provider.of<InitialProvider>(context, listen: false)
-                              .setPassed(true);
+                            //Reload the user so userName updates
+                            await Provider.of<UserProvider>(context,
+                                    listen: false)
+                                .user!
+                                .reload();
+
+                            Provider.of<UserProvider>(context, listen: false)
+                                .setUser(FirebaseAuth.instance.currentUser!);
+
+                            // Allow to move onto next stage
+                            Provider.of<InitialProvider>(context, listen: false)
+                                .setPassed(true);
+                          } else {
+                            setState(() {
+                              inputError = true;
+                              nameFormOpen = true;
+                            });
+                          }
                           // TODO: Add language to local storage so we can default to it each time app starts up
                         }
                       },
-                      child: Row(
-                        children: [
-                          TranslateText(
-                            text: "Let's go",
-                            ukrainian: "Xoдiмo",
-                            selectable: false,
-                            style: GoogleFonts.poppins(
-                              textStyle: const TextStyle(
-                                  color: Colors.white, fontSize: 18),
-                            ),
-                          ),
-                          const Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
+                      child: nameFormOpen
+                          ? Row(
+                              children: [
+                                TranslateText(
+                                  text: "Let's go",
+                                  ukrainian: "Xoдiмo",
+                                  selectable: false,
+                                  style: GoogleFonts.poppins(
+                                    textStyle: const TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            )
+                          : const CircularProgressIndicator.adaptive(),
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
                               Theme.of(context).primaryColor)),
