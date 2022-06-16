@@ -1,8 +1,10 @@
+import 'package:buk/api/donations_api.dart';
 import 'package:buk/api/feed_api.dart';
 import 'package:buk/api/user_api.dart';
 import 'package:buk/pages/fullscreen_loading.dart';
 import 'package:buk/pages/initial_input.dart';
 import 'package:buk/pages/main_page.dart';
+import 'package:buk/providers/donations/donations_provider.dart';
 import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/providers/initial/initial_provider.dart';
 import 'package:buk/providers/user_provider.dart';
@@ -80,6 +82,10 @@ class _AuthGateState extends State<AuthGate> {
                     .removeWhere((element) => likeItems.contains(element));
 
                 provider.removeLikes(itemsToRemove);
+
+                // Set donation items
+                Provider.of<DonationsProvider>(context, listen: false)
+                    .setItems(await fetchDonationItems());
               }
 
               setState(() {

@@ -1,6 +1,7 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:buk/pages/post_page.dart';
 import 'package:buk/providers/screen/screen_provider.dart';
+import 'package:buk/screens/donations_screen.dart';
 import 'package:buk/screens/feed_screen.dart';
 import 'package:buk/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class _MainPageState extends State<MainPage>
   var screenIndex = [
     const FeedScreen(),
     Container(),
-    Container(),
+    const DonationsScreen(),
     const SettingsScreen()
   ];
 
@@ -28,97 +29,9 @@ class _MainPageState extends State<MainPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   title: Row(
-      //     children: [
-      //       TextButton(
-      //         child: const Icon(
-      //           Icons.logout,
-      //           color: Colors.white,
-      //         ),
-      //         onPressed: () {
-      //           FirebaseAuth.instance.signOut();
-      //           Provider.of<InitialProvider>(context, listen: false)
-      //               .setPassed(false);
-      //           Provider.of<UserProvider>(context, listen: false).clearUser();
-      //         },
-      //       ),
-      //       const Spacer(),
-      //       const LanguageSwitch(),
-      //     ],
-      //   ),
-      //   // shape: const RoundedRectangleBorder(
-      //   //     borderRadius: BorderRadius.vertical(bottom: Radius.circular(32))),
-      //   bottom: TabBar(
-      //     controller: controller,
-      //     labelColor: Colors.blue,
-      //     unselectedLabelColor: Colors.white,
-      //     indicatorSize: TabBarIndicatorSize.label,
-      //     indicator: const BoxDecoration(
-      //         borderRadius: BorderRadius.only(
-      //             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-      //         color: Colors.white),
-      //     tabs: const [
-      //       Tab(
-      //         child: Align(
-      //           alignment: Alignment.center,
-      //           child: TranslateText(
-      //             text: "Requesting",
-      //             selectable: false,
-      //           ),
-      //         ),
-      //       ),
-      //       Tab(
-      //         child: Align(
-      //           alignment: Alignment.center,
-      //           child: TranslateText(
-      //             text: "Offering",
-      //             selectable: false,
-      //           ),
-      //         ),
-      //       ),
-      //       Tab(
-      //         child: Align(
-      //           alignment: Alignment.center,
-      //           child: TranslateText(
-      //             text: "Liked",
-      //             selectable: false,
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
-      // body: TabBarView(
-      //   controller: controller,
-      //   children: [
-      //     LiquidPullToRefresh(
-      //       springAnimationDurationInMilliseconds: 200,
-      //       showChildOpacityTransition: false,
-      //       onRefresh: () {
-      //         return Future.delayed(const Duration(seconds: 0), () {
-      //           updateFeeds(context);
-      //         });
-      //       },
-      //       child: const RequestFeed(),
-      //     ),
-      //     LiquidPullToRefresh(
-      //       springAnimationDurationInMilliseconds: 200,
-      //       showChildOpacityTransition: false,
-      //       onRefresh: () {
-      //         return Future.delayed(const Duration(seconds: 0), () {
-      //           updateFeeds(context);
-      //         });
-      //       },
-      //       child: const OfferFeed(),
-      //     ),
-      //     const LikedFeed(),
-      //   ],
-      // ),
       body: Provider.of<Screen>(context).screen,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
+        backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -135,12 +48,12 @@ class _MainPageState extends State<MainPage>
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
-        splashColor: Colors.blue,
-        activeColor: Colors.blue,
+        splashColor: Theme.of(context).primaryColor,
+        activeColor: Theme.of(context).primaryColor,
         icons: const [
           Icons.home,
-          Icons.search,
-          Icons.add_circle_outline,
+          Icons.help_outline_rounded,
+          Icons.attach_money_sharp,
           Icons.settings
         ],
         activeIndex: _bottomNavIndex,

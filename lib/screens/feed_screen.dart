@@ -39,6 +39,7 @@ class _FeedScreenState extends State<FeedScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
         title: Row(
           children: [
@@ -62,7 +63,7 @@ class _FeedScreenState extends State<FeedScreen>
         //     borderRadius: BorderRadius.vertical(bottom: Radius.circular(32))),
         bottom: TabBar(
           controller: controller,
-          labelColor: Colors.blue,
+          labelColor: Theme.of(context).primaryColor,
           unselectedLabelColor: Colors.white,
           indicatorSize: TabBarIndicatorSize.label,
           indicator: const BoxDecoration(
@@ -104,6 +105,7 @@ class _FeedScreenState extends State<FeedScreen>
         controller: controller,
         children: [
           LiquidPullToRefresh(
+            color: Theme.of(context).primaryColor,
             springAnimationDurationInMilliseconds: 200,
             showChildOpacityTransition: false,
             onRefresh: () {
@@ -114,6 +116,7 @@ class _FeedScreenState extends State<FeedScreen>
             child: const RequestFeed(),
           ),
           LiquidPullToRefresh(
+            color: Theme.of(context).primaryColor,
             springAnimationDurationInMilliseconds: 200,
             showChildOpacityTransition: false,
             onRefresh: () {

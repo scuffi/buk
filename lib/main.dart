@@ -1,4 +1,5 @@
 import 'package:buk/pages/auth_gate.dart';
+import 'package:buk/providers/donations/donations_provider.dart';
 import 'package:buk/providers/feed/feed_loader.dart';
 import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/providers/initial/initial_provider.dart';
@@ -8,7 +9,6 @@ import 'package:buk/providers/post/post_form_provider.dart';
 import 'package:buk/providers/screen/screen_provider.dart';
 import 'package:buk/providers/settings_provider.dart';
 import 'package:buk/providers/user_provider.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +35,8 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => PostFormProvider()),
         // ? Settings provider
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
+        // ? Donations provider
+        ChangeNotifierProvider(create: (_) => DonationsProvider()),
       ],
       // child: DevicePreview(
       //   enabled: !kReleaseMode,
@@ -76,10 +78,14 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       useInheritedMediaQuery: true,
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: ThemeData(
+        primaryColor: Colors.indigoAccent,
+        scaffoldBackgroundColor: Colors.white,
+      ),
+      darkTheme: ThemeData(
+        primaryColor: Colors.indigoAccent,
+        scaffoldBackgroundColor: Colors.black45,
+      ),
       // home: const FeedPage(),
       home: const AuthGate(),
     );

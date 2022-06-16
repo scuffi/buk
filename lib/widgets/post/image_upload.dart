@@ -42,9 +42,12 @@ class ImagePost extends StatelessWidget {
                               child: Column(
                                 children: [
                                   TextButton(
-                                    child: const TranslateText(
+                                    child: TranslateText(
                                       text: "Take photo",
                                       selectable: false,
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                     ),
                                     onPressed: () async {
                                       Navigator.pop(context);
@@ -66,9 +69,12 @@ class ImagePost extends StatelessWidget {
                                     height: 3,
                                   ),
                                   TextButton(
-                                    child: const TranslateText(
+                                    child: TranslateText(
                                       text: "Choose from camera roll",
                                       selectable: false,
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                     ),
                                     onPressed: () async {
                                       Navigator.pop(context);
@@ -95,7 +101,7 @@ class ImagePost extends StatelessWidget {
                     dashPattern: const [20, 15],
                     strokeWidth: 3,
                     padding: EdgeInsets.zero,
-                    color: Colors.blue.shade300,
+                    color: Theme.of(context).primaryColorLight,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
                       child: Container(
@@ -109,12 +115,16 @@ class ImagePost extends StatelessWidget {
                             Icon(
                               Icons.add_a_photo_rounded,
                               size: height * 0.04,
+                              color: Theme.of(context).primaryColor,
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 4.0),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
                               child: TranslateText(
                                 text: "Add photo",
                                 selectable: false,
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
                             ),
                             const Spacer(),

@@ -43,7 +43,7 @@ class TypeSelector extends StatelessWidget {
               iconBuilder: (type, size) {
                 return Container(
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.8),
+                    color: Theme.of(context).primaryColor.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(32),
                     border: const Border(),
                   ),

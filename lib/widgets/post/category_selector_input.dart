@@ -54,6 +54,9 @@ class PostCategoryForm extends StatelessWidget {
                           .split('.')
                           .last
                           .toCapitalized(),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                     onPressed: () => {
                       Provider.of<PostFormProvider>(context, listen: false)
@@ -75,12 +78,19 @@ class PostCategoryForm extends StatelessWidget {
                 //       .toCapitalized(),
                 //   selectable: false,
                 // ),
-                Text(Provider.of<PostFormProvider>(context)
-                    .category
-                    .toCapitalized()),
-                const Icon(
+                TranslateText(
+                  selectable: false,
+                  text: Provider.of<PostFormProvider>(context)
+                      .category
+                      .toCapitalized(),
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 16.0,
+                  color: Theme.of(context).primaryColor,
                 ),
               ],
             ),

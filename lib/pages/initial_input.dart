@@ -227,8 +227,8 @@ class _InputPageState extends State<InputPage> {
                         ],
                       ),
                       style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.blue)),
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).primaryColor)),
                     ),
                     const Spacer(),
                   ],

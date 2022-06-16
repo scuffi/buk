@@ -26,69 +26,36 @@ class ItemHeader extends StatelessWidget {
 
     return Row(
       children: [
-        Container(
-          height: 70,
-          width: width * 0.75,
-          padding: const EdgeInsets.only(left: 10),
-          child: Align(
-            child: loading
-                ? Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: Container(
-                        width: width * 0.75,
-                        height: 30,
-                        color: Colors.grey[300]))
-                : Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TranslateText(
-                          text: info.title,
-                          style: GoogleFonts.poppins(
-                            textStyle: const TextStyle(
-                              color: Colors.black87,
-                              fontSize: 22,
-                              overflow: TextOverflow.ellipsis,
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.only(left: 10),
+            child: Align(
+              child: loading
+                  ? Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                          width: width * 0.75,
+                          height: 30,
+                          color: Colors.grey[300]))
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TranslateText(
+                            text: info.title,
+                            style: GoogleFonts.poppins(
+                              textStyle: const TextStyle(
+                                color: Colors.black87,
+                                fontSize: 22,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8.0,
-                                    right: 6.0,
-                                    top: 2.0,
-                                    bottom: 2.0),
-                                child: TranslateText(
-                                  text: info.item_type == "request"
-                                      ? "Requesting"
-                                      : "Offering",
-                                  style: GoogleFonts.poppins(
-                                      textStyle: TextStyle(
-                                          color: info.item_type == "request"
-                                              ? config.requestColour
-                                              : config.offerColour)),
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: info.item_type == "request"
-                                    ? config.requestColour.withOpacity(0.1)
-                                    : config.offerColour.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(16),
-                                // border: Border.all(
-                                //     color: info.item_type == "request"
-                                //         ? config.requestColour
-                                //         : config.offerColour,
-                                //     width: 3),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Container(
+                          Row(
+                            children: [
+                              Container(
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       left: 8.0,
@@ -96,29 +63,62 @@ class ItemHeader extends StatelessWidget {
                                       top: 2.0,
                                       bottom: 2.0),
                                   child: TranslateText(
-                                    text: info.category.name.toCapitalized(),
+                                    text: info.item_type == "request"
+                                        ? "Requesting"
+                                        : "Offering",
                                     style: GoogleFonts.poppins(
                                         textStyle: TextStyle(
-                                            color: config.categoryColour)),
+                                            color: info.item_type == "request"
+                                                ? config.requestColour
+                                                : config.offerColour)),
                                   ),
                                 ),
                                 decoration: BoxDecoration(
-                                  color: config.categoryColour.withOpacity(0.1),
+                                  color: info.item_type == "request"
+                                      ? config.requestColour.withOpacity(0.1)
+                                      : config.offerColour.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(16),
                                   // border: Border.all(
-                                  //     color: config.categoryColour, width: 3),
+                                  //     color: info.item_type == "request"
+                                  //         ? config.requestColour
+                                  //         : config.offerColour,
+                                  //     width: 3),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0,
+                                        right: 6.0,
+                                        top: 2.0,
+                                        bottom: 2.0),
+                                    child: TranslateText(
+                                      text: info.category.name.toCapitalized(),
+                                      style: GoogleFonts.poppins(
+                                          textStyle: TextStyle(
+                                              color: config.categoryColour)),
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        config.categoryColour.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(16),
+                                    // border: Border.all(
+                                    //     color: config.categoryColour, width: 3),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-            alignment: Alignment.centerLeft,
+              alignment: Alignment.centerLeft,
+            ),
           ),
         ),
-        const Spacer(),
         loading
             ? Shimmer.fromColors(
                 baseColor: Colors.grey[300]!,

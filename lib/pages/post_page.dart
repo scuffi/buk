@@ -204,7 +204,8 @@ class _PostPageState extends State<PostPage> {
                                   context: context,
                                   builder: (context) {
                                     return Dialog(
-                                      backgroundColor: Colors.blue.shade50,
+                                      backgroundColor:
+                                          Theme.of(context).primaryColorLight,
                                       child: SizedBox(
                                         height: 200,
                                         width: 350,
@@ -292,8 +293,8 @@ Owner ID: $userId,
                             ),
                           ),
                           style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.blue)),
+                              backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).primaryColor)),
                         ),
                         const Spacer(),
                       ],
