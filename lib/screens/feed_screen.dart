@@ -1,15 +1,10 @@
+import 'package:buk/widgets/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:buk/api/feed_api.dart';
-import 'package:buk/providers/initial/initial_provider.dart';
-import 'package:buk/providers/user_provider.dart';
-import 'package:buk/widgets/feed/feed_offer.dart';
-import 'package:buk/widgets/feed/feed_request.dart';
 import 'package:buk/widgets/feed/liked_feed.dart';
 import 'package:buk/widgets/translate/language_switch.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:provider/provider.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -113,7 +108,7 @@ class _FeedScreenState extends State<FeedScreen>
                 updateFeeds(context);
               });
             },
-            child: const RequestFeed(),
+            child: Feed("request"),
           ),
           LiquidPullToRefresh(
             color: Theme.of(context).primaryColor,
@@ -124,7 +119,7 @@ class _FeedScreenState extends State<FeedScreen>
                 updateFeeds(context);
               });
             },
-            child: const OfferFeed(),
+            child: Feed("offer"),
           ),
           const LikedFeed(),
         ],
