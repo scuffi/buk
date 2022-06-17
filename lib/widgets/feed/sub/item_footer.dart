@@ -1,13 +1,17 @@
+import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
+import 'package:buk/widgets/feed/sub/admin_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:buk/config.dart' as config;
 
 import '../../translate/translate_text.dart';
 
@@ -30,11 +34,13 @@ class ItemFooter extends StatelessWidget {
                   highlightColor: Colors.grey[100]!,
                   child:
                       Container(width: 50, height: 50, color: Colors.grey[300]))
-              : ProfilePicture(
-                  name: info.owner_name,
-                  radius: 21,
-                  fontsize: 15,
-                ),
+              : (isAdmin(context)
+                  ? AdminButton(info: info)
+                  : ProfilePicture(
+                      name: info.owner_name,
+                      radius: 21,
+                      fontsize: 15,
+                    )),
         ),
         loading
             ? Shimmer.fromColors(
@@ -120,5 +126,10 @@ class ItemFooter extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  bool isAdmin(BuildContext context) {
+    return config.adminList
+        .contains(Provider.of<UserProvider>(context, listen: false).user!.uid);
   }
 }

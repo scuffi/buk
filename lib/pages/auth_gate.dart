@@ -1,6 +1,7 @@
 import 'package:buk/api/donations_api.dart';
 import 'package:buk/api/feed_api.dart';
 import 'package:buk/api/user_api.dart';
+import 'package:buk/pages/auth/auth_screen.dart';
 import 'package:buk/pages/fullscreen_loading.dart';
 import 'package:buk/pages/initial_input.dart';
 import 'package:buk/pages/main_page.dart';
@@ -11,7 +12,6 @@ import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterfire_ui/auth.dart';
 import 'package:provider/provider.dart';
 
 class AuthGate extends StatefulWidget {
@@ -33,12 +33,7 @@ class _AuthGateState extends State<AuthGate> {
           if (!snapshot.hasData) {
             loaded = false;
             firstIteration = true;
-            return const SignInScreen(
-              providerConfigs: [
-                // EmailProviderConfiguration(),
-                PhoneProviderConfiguration(),
-              ],
-            );
+            return const AuthScreen();
           }
 
           userExistsInDb(snapshot.data!).then((exists) {

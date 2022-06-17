@@ -5,7 +5,6 @@ import 'package:buk/screens/feed_screen.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:otp_text_field/otp_text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -71,16 +70,16 @@ class _DeleteDialogState extends State<DeleteDialog> {
                     ),
                   )
                 : verified
-                    ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: OTPTextField(
-                          width: 250,
-                          length: 6,
-                          onCompleted: (code) {
-                            otp = code;
-                            verifyOTP();
-                          },
-                        ),
+                    ? const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        // child: OTPTextField(
+                        //   width: 250,
+                        //   length: 6,
+                        //   onCompleted: (code) {
+                        //     otp = code;
+                        //     verifyOTP();
+                        //   },
+                        // ),
                       )
                     : ElevatedButton(
                         onPressed: () {
