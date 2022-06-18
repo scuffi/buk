@@ -74,12 +74,16 @@ class _TranslateTextState extends State<TranslateText> {
     }
 
     final translator = GoogleTranslator();
-    var translation =
-        await translator.translate(text, to: to.toString().split('.').last);
+    try {
+      var translation =
+          await translator.translate(text, to: to.toString().split('.').last);
 
-    // Add to cache so next translation is faster and doesn't require a request
-    TranslateCache.addCache(text, translation.text, to);
+      // Add to cache so next translation is faster and doesn't require a request
+      TranslateCache.addCache(text, translation.text, to);
 
-    return text;
+      return translation.text;
+    } catch (e) {
+      return text;
+    }
   }
 }

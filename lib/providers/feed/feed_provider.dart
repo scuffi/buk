@@ -1,10 +1,13 @@
 import 'package:buk/widgets/feed/interface/category_type.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:flutter/material.dart';
+import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 
 class FeedData with ChangeNotifier {
   List<ItemData> _request_items = [];
   List<ItemData> _offer_items = [];
+  final PaginateRefreshedChangeListener _refreshChangeListener =
+      PaginateRefreshedChangeListener();
 
   int _offer_category = 0;
   int _request_category = 0;
@@ -15,6 +18,9 @@ class FeedData with ChangeNotifier {
   List<ItemData> get requestItems => _request_items;
   List<ItemData> get offerItems => _offer_items;
   List<ItemData> get fullFeed => [..._request_items, ..._offer_items];
+
+  PaginateRefreshedChangeListener get refreshChangeListener =>
+      _refreshChangeListener;
 
   ItemData requestItemAt(int index) {
     return _request_items.elementAt(index);

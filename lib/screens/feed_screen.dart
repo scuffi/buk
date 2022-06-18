@@ -1,10 +1,12 @@
+import 'package:buk/api/feed_api.dart';
+import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/widgets/feed/feed.dart';
 import 'package:flutter/material.dart';
-import 'package:buk/api/feed_api.dart';
 import 'package:buk/widgets/feed/liked_feed.dart';
 import 'package:buk/widgets/translate/language_switch.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:provider/provider.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -105,7 +107,10 @@ class _FeedScreenState extends State<FeedScreen>
             showChildOpacityTransition: false,
             onRefresh: () {
               return Future.delayed(const Duration(seconds: 0), () {
-                updateFeeds(context);
+                // updateFeeds(context);
+                Provider.of<FeedData>(context, listen: false)
+                    .refreshChangeListener
+                    .refreshed = false;
               });
             },
             child: Feed("request"),

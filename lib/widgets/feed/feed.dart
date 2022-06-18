@@ -135,6 +135,9 @@ class Feed extends StatelessWidget {
                     itemBuilderType: PaginateBuilderType.listView,
                     // to fetch real-time data
                     isLive: true,
+                    listeners: [
+                      Provider.of<FeedData>(context).refreshChangeListener,
+                    ],
                   ),
                 ),
               ],
