@@ -1,3 +1,4 @@
+import 'package:buk/providers/feed/feed_loader.dart';
 import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/widgets/feed/feed_item.dart';
 import 'package:buk/widgets/feed/interface/category_type.dart';
@@ -8,8 +9,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
-
-import '../../providers/feed/feed_loader.dart';
 
 class Feed extends StatelessWidget {
   Feed(this.type, {Key? key}) : super(key: key);
@@ -54,43 +53,12 @@ class Feed extends StatelessWidget {
   //         : const FeedLoading(),
   //   );
   // }
-  // ! Not working / pagination
+  // ! Semi working / pagination / reloads on every screen render (might be slow)
   @override
   Widget build(BuildContext context) {
     return Consumer<FeedLoader>(
       builder: (_, loader, __) => loader.loaded
-          ?
-          // Consumer<FeedData>(
-          //     builder: (_, data, __) {
-          //       var feed = type == "request"
-          //           ? data.sortedRequestFeed()
-          //           : data.sortedOfferFeed();
-          //       return Column(
-          //         mainAxisSize: MainAxisSize.min,
-          //         children: [
-          //           CategorySwitcher(
-          //             type: type,
-          //           ),
-          //           feed.isNotEmpty
-          //               ? Expanded(
-          //                   child: ListView.builder(
-          //                     itemCount: feed.length,
-          //                     itemBuilder: (_, index) =>
-          //                         FeedItem(info: feed[index]),
-          //                   ),
-          //                 )
-          //               : Expanded(
-          //                   child: ListView(
-          //                     children: const [
-          //                       SizedBox(height: 550, child: FeedEmpty())
-          //                     ],
-          //                   ),
-          //                 ),
-          //         ],
-          //       );
-          //     },
-          //   )
-          Column(
+          ? Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 CategorySwitcher(
@@ -104,6 +72,7 @@ class Feed extends StatelessWidget {
                           ? Provider.of<FeedData>(context).requestCategory
                           : Provider.of<FeedData>(context).offerCategory;
                       final doc = documentSnapshots[index];
+                      print("New item: ${doc.get("title")}");
                       var item = ItemData(
                         id: doc.id,
                         title: doc.get("title"),
@@ -135,9 +104,9 @@ class Feed extends StatelessWidget {
                     itemBuilderType: PaginateBuilderType.listView,
                     // to fetch real-time data
                     isLive: true,
-                    listeners: [
-                      Provider.of<FeedData>(context).refreshChangeListener,
-                    ],
+                    // listeners: [
+                    //   Provider.of<FeedData>(context).refreshChangeListener,
+                    // ],
                   ),
                 ),
               ],
@@ -145,4 +114,53 @@ class Feed extends StatelessWidget {
           : const FeedLoading(),
     );
   }
+  // ! Semi working / pagination / reloads on every screen render (might be slow)
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: [
+  //       CategorySwitcher(
+  //         type: type,
+  //       ),
+  //       StreamBuilder<QuerySnapshot>(
+  //         stream: FirebaseFirestore.instance
+  //             .collection('feed')
+  //             .where("item_type", isEqualTo: type)
+  //             .orderBy('timestamp', descending: true)
+  //             .limit(Provider.of<FeedData>(context).maxItems)
+  //             .snapshots(),
+  //         builder: (context, snapshot) {
+  //           // print("Stream updated: $snapshot");
+  //           // print("Stream changes: ${snapshot.data!.docChanges}");
+  //           return snapshot.hasData
+  //               ? Expanded(
+  //                   child: ListView.builder(
+  //                     itemCount: snapshot.data!.docs.length,
+  //                     itemBuilder: (_, index) {
+  //                       var doc = snapshot.data!.docs[index];
+  //                       var item = ItemData(
+  //                         id: doc.id,
+  //                         title: doc.get("title"),
+  //                         description: doc.get("description"),
+  //                         images: doc.get("images"),
+  //                         image_location: doc.get("image_location"),
+  //                         category: ItemCategory.values
+  //                             .asNameMap()[doc.get("category")]!,
+  //                         owner_name: doc.get("owner_name"),
+  //                         owner_id: doc.get("owner_id"),
+  //                         owner_contact: doc.get("owner_contact"),
+  //                         item_type: doc.get("item_type"),
+  //                         timestamp: doc.get("timestamp"),
+  //                       );
+  //                       return FeedItem(info: item);
+  //                     },
+  //                   ),
+  //                 )
+  //               : const FeedLoading();
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
 }

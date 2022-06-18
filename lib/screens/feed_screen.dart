@@ -42,14 +42,22 @@ class _FeedScreenState extends State<FeedScreen>
           children: const [
             // TextButton(
             //   child: const Icon(
-            //     Icons.logout,
+            //     Icons.minimize,
             //     color: Colors.white,
             //   ),
             //   onPressed: () {
-            //     FirebaseAuth.instance.signOut();
-            //     Provider.of<InitialProvider>(context, listen: false)
-            //         .setPassed(false);
-            //     Provider.of<UserProvider>(context, listen: false).clearUser();
+            //     Provider.of<FeedData>(context, listen: false).setMaxItems(
+            //         Provider.of<FeedData>(context, listen: false).maxItems - 1);
+            //   },
+            // ),
+            // TextButton(
+            //   child: const Icon(
+            //     Icons.add,
+            //     color: Colors.white,
+            //   ),
+            //   onPressed: () {
+            //     Provider.of<FeedData>(context, listen: false).setMaxItems(
+            //         Provider.of<FeedData>(context, listen: false).maxItems + 1);
             //   },
             // ),
             Spacer(),
