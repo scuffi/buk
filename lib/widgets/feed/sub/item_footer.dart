@@ -30,8 +30,8 @@ class ItemFooter extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: loading
               ? Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade300,
                   child:
                       Container(width: 50, height: 50, color: Colors.grey[300]))
               : (isAdmin(context)
@@ -58,7 +58,9 @@ class ItemFooter extends StatelessWidget {
                   ),
                   SelectableText(
                     timeago.format(DateTime.fromMillisecondsSinceEpoch(
-                        info.timestamp!.millisecondsSinceEpoch)),
+                        info.timestamp != null
+                            ? info.timestamp!.millisecondsSinceEpoch
+                            : DateTime.now().millisecondsSinceEpoch)),
                     style: GoogleFonts.lato(
                         textStyle:
                             TextStyle(fontSize: 12, color: Colors.grey[600])),
@@ -129,7 +131,12 @@ class ItemFooter extends StatelessWidget {
   }
 
   bool isAdmin(BuildContext context) {
-    return config.adminList
-        .contains(Provider.of<UserProvider>(context, listen: false).user!.uid);
+    try {
+      return config.adminList.contains(
+          Provider.of<UserProvider>(context, listen: false).user!.uid);
+    } catch (e) {
+      print("User not valid: $e");
+      return false;
+    }
   }
 }
