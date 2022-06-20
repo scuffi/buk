@@ -280,9 +280,9 @@ Owner ID: $userId,
 
                               resetProviders(context);
 
-                              Future.delayed(const Duration(seconds: 0), () {
-                                updateFeeds(context);
-                              });
+                              // Future.delayed(const Duration(seconds: 0), () {
+                              //   updateFeeds(context);
+                              // });
 
                               Navigator.pop(context);
                               Navigator.pop(context);

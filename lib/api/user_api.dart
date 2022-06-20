@@ -1,4 +1,5 @@
 import 'package:buk/api/feed_api.dart';
+import 'package:buk/widgets/feed/interface/category_type.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -149,7 +150,7 @@ Future<bool> removeUserLikes(User user, List<ItemData> likeItems) async {
   }
 }
 
-Future<List<String>?> getUserLikes(User user) async {
+Future<List<ItemData>?> getUserLikes(User user) async {
   var userDoc = await getUserDocument(user);
   if (userDoc == null) {
     return null;
@@ -166,7 +167,35 @@ Future<List<String>?> getUserLikes(User user) async {
     return null;
   }
 
-  return List.from(data["likes"]);
+  // ? Fetch all the liked items
+  var db = FirebaseFirestore.instance;
+
+  List<ItemData> likeItems = List.empty(growable: true);
+
+  var likes = List.from(data["likes"]);
+
+  for (var element in likes) {
+    var doc = await db.collection(config.feedCollectionName).doc(element).get();
+
+    // Only add if the document actually exists
+    if (doc.exists) {
+      likeItems.add(ItemData(
+        id: doc.id,
+        title: doc.get("title"),
+        description: doc.get("description"),
+        images: doc.get("images"),
+        image_location: doc.get("image_location"),
+        category: ItemCategory.values.asNameMap()[doc.get("category")]!,
+        owner_name: doc.get("owner_name"),
+        owner_id: doc.get("owner_id"),
+        owner_contact: doc.get("owner_contact"),
+        item_type: doc.get("item_type"),
+        timestamp: doc.get("timestamp"),
+      ));
+    }
+  }
+
+  return likeItems;
 }
 
 Future<bool> deleteEverything(User user) async {

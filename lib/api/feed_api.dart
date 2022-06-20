@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:buk/providers/feed/feed_loader.dart';
 import 'package:buk/providers/feed/feed_provider.dart';
+import 'package:buk/providers/feed/feed_type.dart';
 import 'package:buk/widgets/feed/interface/category_type.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -13,55 +14,90 @@ import '../widgets/feed/interface/item_data.dart';
 
 import 'package:buk/config.dart' as config;
 
-Future<void> updateFeeds(BuildContext context) async {
+Future<void> loadItems(
+    {required BuildContext context, required FeedType feedType}) async {
   // Set loading status
   final loader = Provider.of<FeedLoader>(context, listen: false);
   final feed = Provider.of<FeedData>(context, listen: false);
 
   loader.setLoaded(false);
 
-  feed.clearAll();
+  feed.clearItems(feedType);
 
-  var items = await _fetchFeedItems();
+  var items =
+      await _fetchFeedItems(limit: config.limitAmount, feedType: feedType);
   // Iterate through List<ItemData>
   for (var item in items) {
     // Put items into correct types
-
-    if (item.item_type == "request") {
-      feed.addRequestItem(item);
-    } else if (item.item_type == "offer") {
-      feed.addOfferItem(item);
-    }
+    feed.addItem(item, feedType);
   }
-
   loader.setLoaded(true);
 }
 
-Future<List<ItemData>> _fetchFeedItems() async {
+Future<void> loadMore(
+    {required BuildContext context, required FeedType feedType}) async {
+  print("Loading more called");
+  var db = FirebaseFirestore.instance;
+  final feed = Provider.of<FeedData>(context, listen: false);
+
+  var lastItem =
+      await db.collection("feed").doc(feed.getFeed(feedType).last.id).get();
+
+  var documents = await db
+      .collection(config.feedCollectionName)
+      .where("item_type", isEqualTo: feedType.name)
+      .orderBy("timestamp", descending: true)
+      .startAfterDocument(lastItem)
+      .limit(config.limitAmount)
+      .get();
+
+  for (var doc in documents.docs) {
+    print("Adding ${doc.get('title')}");
+    feed.addItem(
+        ItemData(
+          id: doc.id,
+          title: doc.get("title"),
+          description: doc.get("description"),
+          images: doc.get("images"),
+          image_location: doc.get("image_location"),
+          category: ItemCategory.values.asNameMap()[doc.get("category")]!,
+          owner_name: doc.get("owner_name"),
+          owner_id: doc.get("owner_id"),
+          owner_contact: doc.get("owner_contact"),
+          item_type: doc.get("item_type"),
+          timestamp: doc.get("timestamp"),
+        ),
+        feedType);
+  }
+}
+
+Future<List<ItemData>> _fetchFeedItems(
+    {required int limit, required FeedType feedType}) async {
   var db = FirebaseFirestore.instance;
   List<ItemData> data = List.empty(growable: true);
 
-  await db
+  var conn = await db
       .collection(config.feedCollectionName)
+      .where("item_type", isEqualTo: feedType.name)
       .orderBy("timestamp", descending: true)
-      .get()
-      .then((event) {
-    for (var doc in event.docs) {
-      data.add(ItemData(
-        id: doc.id,
-        title: doc.get("title"),
-        description: doc.get("description"),
-        images: doc.get("images"),
-        image_location: doc.get("image_location"),
-        category: ItemCategory.values.asNameMap()[doc.get("category")]!,
-        owner_name: doc.get("owner_name"),
-        owner_id: doc.get("owner_id"),
-        owner_contact: doc.get("owner_contact"),
-        item_type: doc.get("item_type"),
-        timestamp: doc.get("timestamp"),
-      ));
-    }
-  });
+      .limit(limit)
+      .get();
+
+  for (var doc in conn.docs) {
+    data.add(ItemData(
+      id: doc.id,
+      title: doc.get("title"),
+      description: doc.get("description"),
+      images: doc.get("images"),
+      image_location: doc.get("image_location"),
+      category: ItemCategory.values.asNameMap()[doc.get("category")]!,
+      owner_name: doc.get("owner_name"),
+      owner_id: doc.get("owner_id"),
+      owner_contact: doc.get("owner_contact"),
+      item_type: doc.get("item_type"),
+      timestamp: doc.get("timestamp"),
+    ));
+  }
 
   return data;
 }
@@ -121,18 +157,6 @@ Future<bool> uploadItem(
 
 Future<bool> deleteItem(String itemId, String? imageLocation) async {
   var db = FirebaseFirestore.instance;
-
-  // Check if image location is valid, if it is we can then try delete the location
-  // if (imageLocation != null) {
-  //   await FirebaseStorage.instance
-  //       .ref("images/$imageLocation")
-  //       .listAll()
-  //       .then((value) {
-  //     for (var element in value.items) {
-  //       FirebaseStorage.instance.ref(element.fullPath).delete();
-  //     }
-  //   });
-  // }
 
   // Get the feed collection
   var col = db.collection(config.feedCollectionName);

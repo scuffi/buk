@@ -1,3 +1,4 @@
+import 'package:buk/providers/feed/feed_type.dart';
 import 'package:buk/widgets/feed/feed_empty.dart';
 import 'package:buk/widgets/feed/feed_item.dart';
 import 'package:buk/widgets/feed/sub/category_switcher.dart';
@@ -21,7 +22,7 @@ class RequestFeed extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const CategorySwitcher(
-                      type: "request",
+                      type: FeedType.request,
                     ),
                     data.sortedRequestFeed().isNotEmpty
                         ? Expanded(

@@ -6,6 +6,8 @@ var feedCollectionName = "feed";
 var userCollectionName = "users";
 var donationsCollectionName = "donations";
 
+var limitAmount = 5;
+
 // ? Options
 var likeStayOnPageOnUnlike = false;
 

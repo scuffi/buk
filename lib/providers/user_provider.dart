@@ -58,17 +58,14 @@ class UserProvider extends ChangeNotifier {
     return false;
   }
 
-  void defaultAddLikes(List<ItemData> likeIds, FeedData feed) {
-    var idList = List<ItemData>.from(feed.fullFeed);
-    idList.retainWhere((element) => likeIds.contains(element));
-
-    _likes.addAll(idList);
+  void defaultAddLikes(List<ItemData> likes, FeedData feed) {
+    _likes.addAll(likes);
 
     notifyListeners();
   }
 
   bool hasLiked(ItemData item) {
-    return _likes.contains(item);
+    return _likes.any((element) => element.id == item.id);
   }
 
   void clearUser() {

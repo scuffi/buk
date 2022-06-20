@@ -140,9 +140,7 @@ class ItemHeader extends StatelessWidget {
                       onPressed: () async {
                         // var success = await deleteItem(info.id);
 
-                        deleteItem(info.id, info.image_location).then(
-                          (value) => updateFeeds(context),
-                        );
+                        deleteItem(info.id, info.image_location);
 
                         // print(success ? "Deleted" : "Failed to delete");
                         // updateFeeds(context);

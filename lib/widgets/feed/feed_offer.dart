@@ -1,3 +1,4 @@
+import 'package:buk/providers/feed/feed_type.dart';
 import 'package:buk/widgets/feed/feed_empty.dart';
 import 'package:buk/widgets/feed/feed_item.dart';
 import 'package:buk/widgets/feed/sub/category_switcher.dart';
@@ -20,7 +21,7 @@ class OfferFeed extends StatelessWidget {
           Column(
               children: [
                 const CategorySwitcher(
-                  type: "offer",
+                  type: FeedType.offer,
                 ),
                 Provider.of<FeedData>(context).sortedOfferFeed().isNotEmpty
                     ? Expanded(

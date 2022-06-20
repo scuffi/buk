@@ -1,4 +1,5 @@
 import 'package:buk/providers/feed/feed_provider.dart';
+import 'package:buk/providers/feed/feed_type.dart';
 import 'package:buk/util/extensions.dart';
 import 'package:buk/widgets/feed/interface/category_type.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
@@ -12,7 +13,7 @@ class CategorySwitcher extends StatefulWidget {
     required this.type,
   }) : super(key: key);
 
-  final String type;
+  final FeedType type;
 
   @override
   State<CategorySwitcher> createState() => _CategorySwitcherState();
@@ -39,9 +40,7 @@ class _CategorySwitcherState extends State<CategorySwitcher> {
                       var provider =
                           Provider.of<FeedData>(context, listen: false);
 
-                      widget.type == "request"
-                          ? provider.setRequestCategory(index)
-                          : provider.setOfferCategory(index);
+                      provider.setCategory(index, widget.type);
 
                       // updateFeeds(context);
                     }),
@@ -59,7 +58,7 @@ class _CategorySwitcherState extends State<CategorySwitcher> {
                           textStyle: TextStyle(
                               height: 1.25,
                               color: index ==
-                                      (widget.type == "request"
+                                      (widget.type == FeedType.request
                                           ? Provider.of<FeedData>(context,
                                                   listen: false)
                                               .requestCategory
@@ -76,7 +75,7 @@ class _CategorySwitcherState extends State<CategorySwitcher> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(32),
                     color: index ==
-                            (widget.type == "request"
+                            (widget.type == FeedType.request
                                 ? Provider.of<FeedData>(context, listen: false)
                                     .requestCategory
                                 : Provider.of<FeedData>(context, listen: false)
