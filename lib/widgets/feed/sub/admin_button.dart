@@ -97,17 +97,9 @@ class AdminButton extends StatelessWidget {
                                     );
                                   });
                             },
-                            child: Row(
-                              children: const [
-                                Icon(
-                                  Icons.delete_sweep,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Delete item"),
-                                ),
-                              ],
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text("Delete item"),
                             ),
                           ),
                         ),

@@ -12,7 +12,7 @@ var limitAmount = 5;
 var likeStayOnPageOnUnlike = false;
 
 // ? Colours
-var categoryColour = Colors.purple;
+var categoryColour = Colors.indigoAccent;
 var requestColour = Colors.blue;
 var offerColour = Colors.green;
 

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import 'package:buk/config.dart' as config;
+
 class CategorySwitcher extends StatefulWidget {
   const CategorySwitcher({
     Key? key,
@@ -23,7 +25,7 @@ class _CategorySwitcherState extends State<CategorySwitcher> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 6, bottom: 4),
+      padding: const EdgeInsets.all(6),
       child: SizedBox(
         height: 35,
         child: Center(
@@ -66,7 +68,7 @@ class _CategorySwitcherState extends State<CategorySwitcher> {
                                                   listen: false)
                                               .offerCategory)
                                   ? Colors.white
-                                  : Colors.purple,
+                                  : config.categoryColour,
                               fontSize: 16),
                         ),
                       ),
@@ -80,8 +82,8 @@ class _CategorySwitcherState extends State<CategorySwitcher> {
                                     .requestCategory
                                 : Provider.of<FeedData>(context, listen: false)
                                     .offerCategory)
-                        ? Colors.purple.withOpacity(0.9)
-                        : Colors.purple.withOpacity(0.1),
+                        ? config.categoryColour.withOpacity(0.9)
+                        : config.categoryColour.withOpacity(0.1),
                   ),
                 ),
               );

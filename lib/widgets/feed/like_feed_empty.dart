@@ -1,3 +1,4 @@
+import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
@@ -23,8 +24,9 @@ class LikeFeedEmpty extends StatelessWidget {
         Center(
           child: SizedBox(
             width: 300,
-            child: Text(
-              "It looks like nothing is here, try clicking the bookmark on the top right of a post you want to remember.",
+            child: TranslateText(
+              text:
+                  "It looks like nothing is here, try clicking the bookmark on the top right of a post you want to remember.",
               textAlign: TextAlign.center,
               style:
                   GoogleFonts.lato(textStyle: const TextStyle(fontSize: 22.0)),

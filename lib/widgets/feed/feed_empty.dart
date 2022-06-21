@@ -1,3 +1,4 @@
+import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
@@ -23,8 +24,9 @@ class FeedEmpty extends StatelessWidget {
         Center(
           child: SizedBox(
             width: 300,
-            child: Text(
-              "It looks like nothing is here, why don't you create a post to make it less empty?",
+            child: TranslateText(
+              text:
+                  "It looks like nothing is here, why don't you create a post to make it less empty?",
               textAlign: TextAlign.center,
               style:
                   GoogleFonts.lato(textStyle: const TextStyle(fontSize: 22.0)),
