@@ -11,6 +11,11 @@ class UserProvider extends ChangeNotifier {
   User? get user => _user;
   List<ItemData> get likes => _likes;
 
+  List<ItemData> getSortedLikes() {
+    likes.sort((a, b) => b.timestamp!.compareTo(a.timestamp!));
+    return likes;
+  }
+
   void setUser(User user) {
     _user = user;
     notifyListeners();
@@ -32,6 +37,11 @@ class UserProvider extends ChangeNotifier {
     }
 
     return false;
+  }
+
+  void discreditLike(String id) {
+    _likes.removeWhere((item) => item.id == id);
+    notifyListeners();
   }
 
   Future<bool> removeLike(ItemData item) async {

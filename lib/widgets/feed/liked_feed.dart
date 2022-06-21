@@ -26,7 +26,7 @@ class LikedFeed extends StatelessWidget {
                 // // ? Maybe needs to set usableFeed to a state?
                 // print(usableFeed);
 
-                return data.likes.isNotEmpty
+                return data.getSortedLikes().isNotEmpty
                     ? ListView.builder(
                         itemCount: data.likes.length,
                         itemBuilder: (con, index) {
@@ -35,7 +35,8 @@ class LikedFeed extends StatelessWidget {
 
                           print(
                               "index $index, title ${feed.likes.elementAt(index)}");
-                          return FeedItem(info: feed.likes.elementAt(index));
+                          return FeedItem(
+                              info: feed.getSortedLikes().elementAt(index));
                         },
                       )
                     : const LikeFeedEmpty();

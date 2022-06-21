@@ -92,6 +92,8 @@ class _AuthGateState extends State<AuthGate> {
                   } else if (change.type == DocumentChangeType.removed) {
                     // ? This can just try remove a document, we may not have it yet but that's fine
                     feed.removeById(change.doc.id, type);
+                    Provider.of<UserProvider>(context)
+                        .discreditLike(change.doc.id);
                   }
                 }
               });

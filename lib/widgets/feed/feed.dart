@@ -49,12 +49,8 @@ class _FeedState extends State<Feed> {
                               ),
                             ),
                           )
-                        : Expanded(
-                            child: ListView(
-                              children: const [
-                                SizedBox(height: 550, child: FeedEmpty())
-                              ],
-                            ),
+                        : const Expanded(
+                            child: SizedBox(height: 550, child: FeedEmpty()),
                           ),
                   ],
                 );

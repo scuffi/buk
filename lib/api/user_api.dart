@@ -86,6 +86,38 @@ Future<bool> addUserLike(User user, ItemData item) async {
   }
 }
 
+Future<bool> removeUserLikeById(User user, String itemId) async {
+  var userDoc = await getUserDocument(user);
+  if (userDoc == null) {
+    return false;
+  }
+
+  var doc = await userDoc.get();
+
+  Map<String, dynamic> data = doc.data()!;
+
+  if (!data.containsKey("likes")) {
+    data["likes"] = [];
+
+    // If likes is empty, we can assume that nothing can be removed so it 'worked'
+    return true;
+  }
+
+  var likes = List.from(data["likes"]);
+  likes.remove(itemId);
+
+  data["likes"] = likes;
+
+  print("Removing like from ${user.uid}");
+
+  try {
+    await userDoc.set(data);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 Future<bool> removeUserLike(User user, ItemData item) async {
   var userDoc = await getUserDocument(user);
   if (userDoc == null) {
@@ -192,6 +224,9 @@ Future<List<ItemData>?> getUserLikes(User user) async {
         item_type: doc.get("item_type"),
         timestamp: doc.get("timestamp"),
       ));
+    } else {
+      // ! Delete the element from the db
+      removeUserLikeById(user, element);
     }
   }
 
