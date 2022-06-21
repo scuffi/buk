@@ -1,9 +1,12 @@
 import 'package:buk/providers/feed/feed_type.dart';
+import 'package:buk/providers/screen/screen_provider.dart';
+import 'package:buk/screens/profile_screen.dart';
 import 'package:buk/widgets/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:buk/widgets/feed/liked_feed.dart';
 import 'package:buk/widgets/translate/language_switch.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
+import 'package:provider/provider.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -36,9 +39,19 @@ class _FeedScreenState extends State<FeedScreen>
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
         title: Row(
-          children: const [
-            Spacer(),
-            LanguageSwitch(),
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: InkWell(
+                onTap: () {
+                  Provider.of<Screen>(context, listen: false)
+                      .setScreen(const ProfileScreen(), context);
+                },
+                child: const Icon(Icons.person),
+              ),
+            ),
+            const Spacer(),
+            const LanguageSwitch(),
           ],
         ),
         // shape: const RoundedRectangleBorder(
