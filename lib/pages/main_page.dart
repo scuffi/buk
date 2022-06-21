@@ -1,6 +1,7 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:buk/pages/post_page.dart';
 import 'package:buk/providers/screen/screen_provider.dart';
+import 'package:buk/screens/documents_screen.dart';
 import 'package:buk/screens/donations_screen.dart';
 import 'package:buk/screens/feed_screen.dart';
 import 'package:buk/screens/settings_screen.dart';
@@ -20,7 +21,7 @@ class _MainPageState extends State<MainPage>
 
   var screenIndex = [
     const FeedScreen(),
-    Container(),
+    const DocumentsScreen(),
     const DonationsScreen(),
     const SettingsScreen()
   ];

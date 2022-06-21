@@ -2,7 +2,7 @@ import 'package:buk/providers/feed/feed_loader.dart';
 import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/feed/feed_item.dart';
 import 'package:buk/widgets/feed/like_feed_empty.dart';
-import 'package:buk/widgets/feed_loading.dart';
+import 'package:buk/widgets/feed/feed_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

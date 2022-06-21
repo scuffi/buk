@@ -58,7 +58,7 @@ class _PostPageState extends State<PostPage> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 70.0),
                     child: Container(
-                      height: height * 0.1,
+                      height: 85,
                       width: width * 0.8,
                       decoration: BoxDecoration(
                           color: Colors.white,

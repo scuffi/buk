@@ -5,7 +5,7 @@ import 'package:buk/providers/feed/feed_type.dart';
 import 'package:buk/widgets/feed/feed_empty.dart';
 import 'package:buk/widgets/feed/feed_item.dart';
 import 'package:buk/widgets/feed/sub/category_switcher.dart';
-import 'package:buk/widgets/feed_loading.dart';
+import 'package:buk/widgets/feed/feed_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
