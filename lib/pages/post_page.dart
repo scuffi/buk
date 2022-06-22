@@ -236,7 +236,12 @@ class _PostPageState extends State<PostPage> {
 
                               List<String> images = [];
                               if (item.images.isNotEmpty) {
-                                images = await uploadImages(item.images, id);
+                                images = await uploadImages(item.images, id)
+                                    .timeout(Duration(seconds: 6),
+                                        onTimeout: () {
+                                  print("Timed out");
+                                  return [];
+                                });
                               } else {
                                 id = null;
                               }
@@ -267,15 +272,20 @@ Owner ID: $userId,
 """);
 
                               await uploadItem(
-                                  userId,
-                                  userName,
-                                  userContact,
-                                  title,
-                                  description,
-                                  images,
-                                  id,
-                                  itemType,
-                                  category);
+                                      userId,
+                                      userName,
+                                      userContact,
+                                      title,
+                                      description,
+                                      images,
+                                      id,
+                                      itemType,
+                                      category)
+                                  .timeout(Duration(seconds: 6),
+                                      onTimeout: (() {
+                                print("Post timed out");
+                                return false;
+                              }));
                               print("Uploaded new item");
 
                               resetProviders(context);

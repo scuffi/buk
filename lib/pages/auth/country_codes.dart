@@ -186,7 +186,6 @@ final countries = {
   'Puerto Rico': {'country_code': 'PR', 'dial_code': 1},
   'Qatar': {'country_code': 'QA', 'dial_code': 974},
   'Romania': {'country_code': 'RO', 'dial_code': 40},
-  'Russian Federation': {'country_code': 'RU', 'dial_code': 7},
   'Rwanda': {'country_code': 'RW', 'dial_code': 250},
   'Réunion': {'country_code': 'RE', 'dial_code': 262},
   'Saint Barthélemy': {'country_code': 'BL', 'dial_code': 590},
