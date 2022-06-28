@@ -16,5 +16,10 @@ var categoryColour = Colors.indigoAccent;
 var requestColour = Colors.blue;
 var offerColour = Colors.green;
 
-// ? Administrators (note this doesn't make someone an admin, just for UI purposes)
-var adminList = ["iGmfEn9G5kP4imzdiQ84bb7DJdn2"];
+// ? Geolocation service
+// ! Production -> uk based
+// var middleLatitude = 53.8266;
+// var middleLongitude = -4.26279;
+var middleLatitude = 37.75877;
+var middleLongitude = -122.44675;
+var radius = 550000; // Radius in metres

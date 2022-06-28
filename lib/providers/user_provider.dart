@@ -7,9 +7,16 @@ import 'package:buk/api/user_api.dart';
 class UserProvider extends ChangeNotifier {
   User? _user;
   List<ItemData> _likes = [];
+  bool _admin = false;
 
   User? get user => _user;
   List<ItemData> get likes => _likes;
+  bool get admin => _admin;
+
+  void setAdmin(bool bool) {
+    _admin = bool;
+    notifyListeners();
+  }
 
   List<ItemData> getSortedLikes() {
     likes.sort((a, b) => b.timestamp!.compareTo(a.timestamp!));

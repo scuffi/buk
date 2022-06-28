@@ -2,6 +2,7 @@ import 'package:buk/api/feed_api.dart';
 import 'package:buk/widgets/feed/interface/category_type.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:buk/config.dart' as config;
 
@@ -287,4 +288,26 @@ Future<bool> displayNameAvailable(String name) async {
       .get();
 
   return docs.size == 0;
+}
+
+final functions = FirebaseFunctions.instance;
+
+Future<bool> isVerified(User user) async {
+  try {
+    var verified = await functions.httpsCallable('isVerified').call();
+    return verified.data.toString() == "true" ? true : false;
+  } on FirebaseFunctionsException catch (e) {
+    print(e.message);
+    return false;
+  }
+}
+
+Future<bool> isAdmin(User user) async {
+  try {
+    var verified = await functions.httpsCallable('isAdmin').call();
+    return verified.data;
+  } on FirebaseFunctionsException catch (e) {
+    print(e.message);
+    return false;
+  }
 }

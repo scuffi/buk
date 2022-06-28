@@ -237,9 +237,13 @@ class _PostPageState extends State<PostPage> {
                               List<String> images = [];
                               if (item.images.isNotEmpty) {
                                 images = await uploadImages(item.images, id)
-                                    .timeout(Duration(seconds: 6),
+                                    .timeout(const Duration(seconds: 6),
                                         onTimeout: () {
-                                  print("Timed out");
+                                  // print("Timed out");
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              "Failed to post. Please check your connection")));
                                   return [];
                                 });
                               } else {
@@ -259,17 +263,17 @@ class _PostPageState extends State<PostPage> {
                               String itemType = item.type;
                               String category = item.category;
 
-                              print("""
-Category: $category,
-Description: $description,
-Title: $title,
-Type: $itemType,
-Images: $images,
-Owner contact: $userContact,
-Image location: $id,
-Owner name: $userName,
-Owner ID: $userId,
-""");
+//                               print("""
+// Category: $category,
+// Description: $description,
+// Title: $title,
+// Type: $itemType,
+// Images: $images,
+// Owner contact: $userContact,
+// Image location: $id,
+// Owner name: $userName,
+// Owner ID: $userId,
+// """);
 
                               await uploadItem(
                                       userId,
@@ -281,12 +285,16 @@ Owner ID: $userId,
                                       id,
                                       itemType,
                                       category)
-                                  .timeout(Duration(seconds: 6),
+                                  .timeout(const Duration(seconds: 6),
                                       onTimeout: (() {
-                                print("Post timed out");
+                                // print("Post timed out");
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Failed to post. Please check your connection")));
                                 return false;
                               }));
-                              print("Uploaded new item");
+                              // print("Uploaded new item");
 
                               resetProviders(context);
 

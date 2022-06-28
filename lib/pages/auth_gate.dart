@@ -10,6 +10,7 @@ import 'package:buk/providers/feed/feed_provider.dart';
 import 'package:buk/providers/feed/feed_type.dart';
 import 'package:buk/providers/initial/initial_provider.dart';
 import 'package:buk/providers/user_provider.dart';
+import 'package:buk/widgets/error/awaiting_verification.dart';
 import 'package:buk/widgets/feed/interface/category_type.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,6 +28,7 @@ class AuthGate extends StatefulWidget {
 class _AuthGateState extends State<AuthGate> {
   bool loaded = false;
   bool firstIteration = true;
+  bool verified = false;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +112,13 @@ class _AuthGateState extends State<AuthGate> {
               Provider.of<DonationsProvider>(context, listen: false)
                   .setItems(await fetchDonationItems());
 
+              bool verify = await isVerified(provider.user!);
+              bool isadmin = await isAdmin(provider.user!);
+
+              provider.setAdmin(isadmin);
+
               setState(() {
+                verified = verify;
                 loaded = true;
               });
             });
@@ -123,7 +131,9 @@ class _AuthGateState extends State<AuthGate> {
                   Provider.of<InitialProvider>(context).passed
               ? !loaded
                   ? const FullScreenLoader()
-                  : const MainPage()
+                  : verified
+                      ? const MainPage()
+                      : const AwaitingVerification()
               : InputPage(snapshot.data!);
         });
   }

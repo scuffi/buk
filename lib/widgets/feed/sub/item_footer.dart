@@ -11,7 +11,6 @@ import 'package:flutter_sms/flutter_sms.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:buk/config.dart' as config;
 
 import '../../translate/translate_text.dart';
 
@@ -131,12 +130,6 @@ class ItemFooter extends StatelessWidget {
   }
 
   bool isAdmin(BuildContext context) {
-    try {
-      return config.adminList.contains(
-          Provider.of<UserProvider>(context, listen: false).user!.uid);
-    } catch (e) {
-      print("User not valid: $e");
-      return false;
-    }
+    return Provider.of<UserProvider>(context, listen: false).admin;
   }
 }

@@ -2,12 +2,14 @@ import 'package:buk/providers/initial/initial_provider.dart';
 import 'package:buk/providers/screen/screen_provider.dart';
 import 'package:buk/providers/settings_provider.dart';
 import 'package:buk/providers/user_provider.dart';
+import 'package:buk/screens/admin/verifications_screen.dart';
 import 'package:buk/screens/feed_screen.dart';
 import 'package:buk/widgets/settings/delete_dialog.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class SettingsButtons extends StatefulWidget {
@@ -38,12 +40,53 @@ class _SettingsButtonsState extends State<SettingsButtons> {
               textStyle: TextStyle(color: Colors.grey[800], fontSize: 30)),
         ),
         Text(
-          Provider.of<UserProvider>(context).user!.email == null
-              ? Provider.of<UserProvider>(context).user!.phoneNumber!
-              : Provider.of<UserProvider>(context).user!.email!,
+          Provider.of<UserProvider>(context).user!.phoneNumber!,
           style: GoogleFonts.lato(
               textStyle: TextStyle(color: Colors.grey[700], fontSize: 15)),
         ),
+
+        // ? Only admins can view awaiting verification users
+        isAdmin(context)
+            ? TextButton(
+                style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+                onPressed: () {
+                  print("Open page");
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      type: PageTransitionType.rightToLeft,
+                      child: const VerificationsScreen(),
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.help_outline,
+                      color: Colors.indigoAccent,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: TranslateText(
+                        text: "Awaiting verification",
+                        selectable: false,
+                        style: GoogleFonts.lato(
+                            textStyle: const TextStyle(fontSize: 16),
+                            color: Colors.grey[700]),
+                      ),
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: Colors.grey[700],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            : Container(), //
         TextButton(
           style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
           onPressed: () {
@@ -247,5 +290,9 @@ class _SettingsButtonsState extends State<SettingsButtons> {
         ), // Logout
       ],
     );
+  }
+
+  bool isAdmin(BuildContext context) {
+    return Provider.of<UserProvider>(context, listen: false).admin;
   }
 }

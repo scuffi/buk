@@ -65,5 +65,7 @@
 	<string>Choose photo from gallery to post.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Take photo from the camera to post.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs to restrict access in certain countries that would possibly send hate to war refugees.</string>
 </dict>
 </plist>
