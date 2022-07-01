@@ -1,8 +1,8 @@
+import 'package:buk/pages/auth/number_input.dart';
 import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
@@ -62,42 +62,42 @@ class _AuthScreenState extends State<AuthScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: Form(
                       key: _formKey,
-                      child: IntlPhoneField(
-                        // ? Dropdown
-                        dropdownDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16)),
-                        dropdownIcon: const Icon(
-                          Icons.keyboard_arrow_down_outlined,
-                          color: Colors.black54,
-                        ),
-                        dropdownTextStyle: GoogleFonts.poppins(
-                          textStyle: const TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 16),
-                        ),
-                        invalidNumberMessage: "Phone number is not valid",
-                        // ? Input
-                        style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 16),
-                        ),
-                        decoration: const InputDecoration(
-                          labelText: 'Phone Number',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(),
-                          ),
-                        ),
-                        initialCountryCode: 'GB',
-                        onChanged: (phone) {
-                          setState(() {
-                            number = phone.completeNumber;
-                          });
-                        },
-                      ),
-                      // child: const NumberInput(),
+                      // child: IntlPhoneField(
+                      //   // ? Dropdown
+                      //   dropdownDecoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(16)),
+                      //   dropdownIcon: const Icon(
+                      //     Icons.keyboard_arrow_down_outlined,
+                      //     color: Colors.black54,
+                      //   ),
+                      //   dropdownTextStyle: GoogleFonts.poppins(
+                      //     textStyle: const TextStyle(
+                      //         color: Colors.black87,
+                      //         fontWeight: FontWeight.normal,
+                      //         fontSize: 16),
+                      //   ),
+                      //   invalidNumberMessage: "Phone number is not valid",
+                      //   // ? Input
+                      //   style: GoogleFonts.poppins(
+                      //     textStyle: const TextStyle(
+                      //         color: Colors.black87,
+                      //         fontWeight: FontWeight.normal,
+                      //         fontSize: 16),
+                      //   ),
+                      //   decoration: const InputDecoration(
+                      //     labelText: 'Phone Number',
+                      //     border: OutlineInputBorder(
+                      //       borderSide: BorderSide(),
+                      //     ),
+                      //   ),
+                      //   initialCountryCode: 'GB',
+                      //   onChanged: (phone) {
+                      //     setState(() {
+                      //       number = phone.completeNumber;
+                      //     });
+                      //   },
+                      // ),
+                      child: const NumberInput(),
                     ),
                   ),
                   ElevatedButton(

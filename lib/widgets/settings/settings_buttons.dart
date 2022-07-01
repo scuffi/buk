@@ -50,7 +50,6 @@ class _SettingsButtonsState extends State<SettingsButtons> {
             ? TextButton(
                 style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
                 onPressed: () {
-                  print("Open page");
                   Navigator.push(
                     context,
                     PageTransition(
