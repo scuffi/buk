@@ -6,31 +6,24 @@ import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 
 class BookmarkButton extends StatefulWidget {
-  BookmarkButton({Key? key, required this.item}) : super(key: key);
+  BookmarkButton({Key? key, required this.item, required this.liked})
+      : super(key: key);
 
   ItemData item;
+  bool liked;
 
   @override
   State<BookmarkButton> createState() => _BookmarkButtonState();
 }
 
 class _BookmarkButtonState extends State<BookmarkButton> {
-  late bool defaultChecked;
-
-  @override
-  void initState() {
-    super.initState();
-    defaultChecked =
-        Provider.of<UserProvider>(context, listen: false).hasLiked(widget.item);
-  }
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50,
       width: 50,
       child: LikeButton(
-        isLiked: defaultChecked,
+        isLiked: widget.liked,
         likeBuilder: (isLiked) {
           return Icon(
             isLiked ? Icons.bookmark : Icons.bookmark_outline,

@@ -149,6 +149,8 @@ class ItemHeader extends StatelessWidget {
                   )
                 : BookmarkButton(
                     item: info,
+                    liked: Provider.of<UserProvider>(context, listen: true)
+                        .hasLiked(info),
                   ),
       ],
     );
