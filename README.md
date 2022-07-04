@@ -1,4 +1,4 @@
-# buk
+# uk2buk
 
 An items and services matching application for Ukrainian refugees trying to understand a new area.
 
