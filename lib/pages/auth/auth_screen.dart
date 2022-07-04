@@ -308,7 +308,7 @@ class _AuthScreenState extends State<AuthScreen> {
         });
       },
       verificationFailed: (FirebaseAuthException e) {
-        // print(e.message);
+        print(e.message);
       },
       codeSent: (String verificationId, int? resendToken) {
         // verified = true;
