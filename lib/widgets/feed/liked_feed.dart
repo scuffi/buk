@@ -33,8 +33,8 @@ class LikedFeed extends StatelessWidget {
                           var feed =
                               Provider.of<UserProvider>(con, listen: false);
 
-                          print(
-                              "index $index, title ${feed.likes.elementAt(index)}");
+                          // print(
+                          //     "index $index, title ${feed.likes.elementAt(index)}");
                           return FeedItem(
                               info: feed.getSortedLikes().elementAt(index));
                         },

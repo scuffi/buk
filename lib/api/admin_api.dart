@@ -22,10 +22,10 @@ Future<void> deleteUserPost(String itemId) async {
 
 Future<void> deleteUser(String userId) async {
   try {
-    print("Deleting $userId");
+    // print("Deleting $userId");
     await functions.httpsCallable('deleteUser').call(userId);
-  } on FirebaseFunctionsException catch (e) {
-    print(e.message);
+  } on FirebaseFunctionsException {
+    // print(e.message);
   }
 }
 
@@ -33,17 +33,17 @@ Future<Map> getUser(String user) async {
   try {
     var verified = await functions.httpsCallable('getUser').call(user);
     return verified.data;
-  } on FirebaseFunctionsException catch (e) {
-    print(e.message);
+  } on FirebaseFunctionsException {
+    // print(e.message);
     return {};
   }
 }
 
 Future<void> verifyUser(String userId) async {
   try {
-    print("Verifying $userId");
+    // print("Verifying $userId");
     await functions.httpsCallable('verifyUser').call(userId);
-  } on FirebaseFunctionsException catch (e) {
-    print(e.message);
+  } on FirebaseFunctionsException {
+    // print(e.message);
   }
 }

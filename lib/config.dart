@@ -25,3 +25,8 @@ var middleLongitude = -4.26279;
 var radius = 550000; // Radius in metres
 
 var helpEmail = "hello@uk2buk.com";
+
+var termsLink =
+    "https://github.com/scuffi/uk2buk-privacy/blob/main/terms-and-conditions.md";
+var privacyLink =
+    "https://github.com/scuffi/uk2buk-privacy/blob/main/privacy-policy.md";

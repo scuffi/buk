@@ -104,7 +104,7 @@ class _AuthGateState extends State<AuthGate> {
 
               // Add like items to provider if not null
               if (likes != null) {
-                print("Adding likes to provider $likes");
+                // print("Adding likes to provider $likes");
                 provider.defaultAddLikes(likes, feed);
               }
 

@@ -35,15 +35,27 @@ class _TranslateTextState extends State<TranslateText> {
 
   @override
   Widget build(BuildContext context) {
-    translate(
-            Provider.of<Language>(context, listen: true).language, widget.text)
-        .then((value) {
-      if (!mounted) return;
+    if (widget.ukrainian != null) {
+      if (mounted) {
+        setState(() {
+          currentTranslation =
+              Provider.of<Language>(context, listen: true).language ==
+                      LanguageType.en
+                  ? widget.text
+                  : widget.ukrainian;
+        });
+      }
+    } else {
+      translate(Provider.of<Language>(context, listen: true).language,
+              widget.text)
+          .then((value) {
+        if (!mounted) return;
 
-      setState(() {
-        currentTranslation = value;
+        setState(() {
+          currentTranslation = value;
+        });
       });
-    });
+    }
 
     return Consumer<Language>(
       builder: ((context, value, child) {

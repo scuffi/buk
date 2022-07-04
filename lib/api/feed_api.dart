@@ -36,7 +36,7 @@ Future<void> loadItems(
 
 Future<void> loadMore(
     {required BuildContext context, required FeedType feedType}) async {
-  print("Loading more called");
+  // print("Loading more called");
   var db = FirebaseFirestore.instance;
   final feed = Provider.of<FeedData>(context, listen: false);
 
@@ -52,7 +52,7 @@ Future<void> loadMore(
       .get();
 
   for (var doc in documents.docs) {
-    print("Adding ${doc.get('title')}");
+    // print("Adding ${doc.get('title')}");
     feed.addItem(
         ItemData(
           id: doc.id,

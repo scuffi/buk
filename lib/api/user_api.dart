@@ -19,7 +19,7 @@ Future<bool> createUserInDb(User user) async {
     await col.add(input);
     return true;
   } catch (e) {
-    print(e);
+    // print(e);
     return false;
   }
 }
@@ -77,7 +77,7 @@ Future<bool> addUserLike(User user, ItemData item) async {
 
   data["likes"] = likes;
 
-  print("Adding like to ${user.uid}");
+  // print("Adding like to ${user.uid}");
 
   try {
     await userDoc.set(data);
@@ -109,7 +109,7 @@ Future<bool> removeUserLikeById(User user, String itemId) async {
 
   data["likes"] = likes;
 
-  print("Removing like from ${user.uid}");
+  // print("Removing like from ${user.uid}");
 
   try {
     await userDoc.set(data);
@@ -141,7 +141,7 @@ Future<bool> removeUserLike(User user, ItemData item) async {
 
   data["likes"] = likes;
 
-  print("Removing like from ${user.uid}");
+  // print("Removing like from ${user.uid}");
 
   try {
     await userDoc.set(data);
@@ -243,28 +243,28 @@ Future<bool> deleteEverything(User user) async {
       await userDoc.delete();
     }
 
-    print("deleted user doc");
+    // print("deleted user doc");
 
     var items = await getAllUserItems(user);
-    print("All users items: $items");
+    // print("All users items: $items");
 
     for (var element in items.docs) {
       await deleteItem(element.id, element.data()["image_location"]);
     }
 
-    print("deleted items");
+    // print("deleted items");
 
     return true;
   } catch (e) {
-    print(e);
+    // print(e);
     return false;
   }
 }
 
 Future<QuerySnapshot<Map<String, dynamic>>> getAllUserItems(User user) async {
   var db = FirebaseFirestore.instance;
-  print(
-      "Fetching items with userId ${await db.collection(config.feedCollectionName).where("owner_id", isEqualTo: user.uid).get()}");
+  // print(
+  // "Fetching items with userId ${await db.collection(config.feedCollectionName).where("owner_id", isEqualTo: user.uid).get()}");
   return await db
       .collection(config.feedCollectionName)
       .where("owner_id", isEqualTo: user.uid)
@@ -296,8 +296,8 @@ Future<bool> isVerified(User user) async {
   try {
     var verified = await functions.httpsCallable('isVerified').call();
     return verified.data.toString() == "true" ? true : false;
-  } on FirebaseFunctionsException catch (e) {
-    print(e.message);
+  } on FirebaseFunctionsException {
+    // print(e.message);
     return false;
   }
 }
@@ -306,8 +306,8 @@ Future<bool> isAdmin(User user) async {
   try {
     var verified = await functions.httpsCallable('isAdmin').call();
     return verified.data;
-  } on FirebaseFunctionsException catch (e) {
-    print(e.message);
+  } on FirebaseFunctionsException {
+    // print(e.message);
     return false;
   }
 }

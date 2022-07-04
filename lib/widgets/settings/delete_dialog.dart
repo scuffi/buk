@@ -41,11 +41,11 @@ class _DeleteDialogState extends State<DeleteDialog> {
                 ? ElevatedButton(
                     onPressed: () async {
                       if (otp != '') {
-                        print("Delete account");
+                        // print("Delete account");
                         var userProvider =
                             Provider.of<UserProvider>(context, listen: false);
 
-                        print("User: ${userProvider.user}");
+                        // print("User: ${userProvider.user}");
 
                         userProvider.user!.delete();
                         // FirebaseAuth.instance.signOut();
@@ -129,17 +129,17 @@ class _DeleteDialogState extends State<DeleteDialog> {
         await FirebaseAuth.instance
             .signInWithCredential(credential)
             .then((value) {
-          print("You are logged in successfully");
+          // print("You are logged in successfully");
         });
       },
       verificationFailed: (FirebaseAuthException e) {
-        print(e.message);
+        // print(e.message);
       },
       codeSent: (String verificationId, int? resendToken) {
         verified = true;
         verificationID = verificationId;
         setState(() {});
-        print("Verified: $verified");
+        // print("Verified: $verified");
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
@@ -160,12 +160,12 @@ class _DeleteDialogState extends State<DeleteDialog> {
     ).whenComplete(
       () {
         if (Provider.of<UserProvider>(context, listen: false).user != null) {
-          print("Logged in");
+          // print("Logged in");
           setState(() {
             canDelete = true;
           });
         } else {
-          print("Login failed");
+          // print("Login failed");
           setState(() {
             verified = false;
             otp = '';

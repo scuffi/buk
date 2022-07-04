@@ -16,7 +16,7 @@ class AdminButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onDoubleTap: () {
-        print("Secret button");
+        // print("Secret button");
         showDialog(
             context: context,
             builder: (context) {

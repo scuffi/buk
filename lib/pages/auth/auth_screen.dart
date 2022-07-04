@@ -1,12 +1,18 @@
 import 'package:buk/pages/auth/number_input.dart';
+import 'package:buk/providers/language/language_enum.dart';
+import 'package:buk/providers/language/language_provider.dart';
 import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/translate/language_switch.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+import 'package:buk/config.dart' as config;
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -37,7 +43,11 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle defaultStyle =
+        const TextStyle(color: Colors.black38, fontSize: 12.0);
+    TextStyle linkStyle = TextStyle(color: Colors.blue.shade800);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.indigoAccent,
       body: Stack(
         alignment: AlignmentDirectional.center,
@@ -80,6 +90,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
                         child: TranslateText(
                           text: "Sign in",
+                          ukrainian: "yвiйти",
                           selectable: false,
                           style: GoogleFonts.poppins(
                               textStyle: const TextStyle(
@@ -110,7 +121,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                         onPressed: () async {
-                          print(number);
+                          // print(number);
                           setState(() {
                             code = '';
                             verificationID = '';
@@ -122,6 +133,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         },
                         child: TranslateText(
                           text: "Sign in",
+                          ukrainian: "yвiйти",
                           selectable: false,
                           style: GoogleFonts.poppins(
                             textStyle: const TextStyle(
@@ -131,20 +143,143 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          print("Open terms and conditions");
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: TranslateText(
-                            selectable: false,
-                            text:
-                                "By Signing in, you agree to our Terms & Conditions",
-                            style: GoogleFonts.lato(
-                                textStyle: const TextStyle(
-                                    color: Colors.black38, fontSize: 10)),
+                      // GestureDetector(
+                      //   behavior: HitTestBehavior.translucent,
+                      //   onTap: () async {
+                      //     // print("Open terms and conditions");
+                      //     if (await canLaunchUrlString(
+                      //         "https://github.com/scuffi/uk2buk-privacy/blob/main/terms-and-conditions.md")) {
+                      //       await launchUrlString(
+                      //           "https://github.com/scuffi/uk2buk-privacy/blob/main/terms-and-conditions.md");
+                      //     } else {
+                      //       ScaffoldMessenger.of(context).showSnackBar(
+                      //         const SnackBar(
+                      //           content: Text(
+                      //               'Failed to launch: https://github.com/scuffi/uk2buk-privacy/blob/main/terms-and-conditions.md'),
+                      //         ),
+                      //       );
+                      //     }
+                      //   },
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(12.0),
+                      //     child: TranslateText(
+                      //       selectable: false,
+                      //       text:
+                      //           "By Signing in, you agree to our Terms & Conditions",
+                      //       style: GoogleFonts.lato(
+                      //           textStyle: const TextStyle(
+                      //               color: Colors.black38, fontSize: 10)),
+                      //     ),
+                      //   ),
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: defaultStyle,
+                            children: Provider.of<Language>(context,
+                                            listen: true)
+                                        .language ==
+                                    LanguageType.en
+                                ? [
+                                    const TextSpan(
+                                        text:
+                                            "By signing in you agree to our "),
+                                    TextSpan(
+                                      text: "Terms and Conditions",
+                                      style: linkStyle,
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          // launch terms of service
+                                          if (await canLaunchUrlString(
+                                              config.termsLink)) {
+                                            await launchUrlString(
+                                                config.termsLink);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Failed to launch: ${config.termsLink}'),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                    ),
+                                    const TextSpan(
+                                        text: " and that you have read our "),
+                                    TextSpan(
+                                      text: "Privacy Policy",
+                                      style: linkStyle,
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          // launch privacy policy
+                                          if (await canLaunchUrlString(
+                                              config.privacyLink)) {
+                                            await launchUrlString(
+                                                config.privacyLink);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Failed to launch: ${config.privacyLink}'),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                    ),
+                                  ]
+                                : [
+                                    const TextSpan(
+                                        text:
+                                            "Увійшовши в систему, ви погоджуєтеся з нашими "),
+                                    TextSpan(
+                                      text: "Правила та умови",
+                                      style: linkStyle,
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          // launch terms of service
+                                          if (await canLaunchUrlString(
+                                              config.termsLink)) {
+                                            await launchUrlString(
+                                                config.termsLink);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'He вдалося запустити: ${config.termsLink}'),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                    ),
+                                    const TextSpan(
+                                        text: " i що ви прочитали наш "),
+                                    TextSpan(
+                                      text: "Політика конфіденційності",
+                                      style: linkStyle,
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          // launch privacy policy
+                                          if (await canLaunchUrlString(
+                                              config.privacyLink)) {
+                                            await launchUrlString(
+                                                config.privacyLink);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'He вдалося запустити: ${config.privacyLink}'),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                    ),
+                                  ],
                           ),
                         ),
                       ),
@@ -169,17 +304,17 @@ class _AuthScreenState extends State<AuthScreen> {
         await FirebaseAuth.instance
             .signInWithCredential(credential)
             .then((value) {
-          print("You are logged in successfully");
+          // print("You are logged in successfully");
         });
       },
       verificationFailed: (FirebaseAuthException e) {
-        print(e.message);
+        // print(e.message);
       },
       codeSent: (String verificationId, int? resendToken) {
         // verified = true;
         verificationID = verificationId;
         setState(() {});
-        print("Verified: ${verificationID != ''}");
+        // print("Verified: ${verificationID != ''}");
         openOTPDialog();
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
@@ -229,6 +364,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                     TranslateText(
                       text: "Authenticate",
+                      ukrainian: "Aвтeнтифiкyвaти",
                       style: GoogleFonts.lato(
                         textStyle: const TextStyle(
                             color: Colors.black,
@@ -240,6 +376,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       padding: const EdgeInsets.only(top: 10.0),
                       child: TranslateText(
                         text: "Enter the 6-digit code sent to your phone",
+                        ukrainian:
+                            "Введіть 6-значний код, надісланий на ваш телефон",
                         style: GoogleFonts.poppins(
                           textStyle: TextStyle(
                               color: Colors.grey.shade600,
@@ -267,7 +405,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           }
                         },
                         onCompleted: (pin) async {
-                          print("Pin completed $pin");
+                          // print("Pin completed $pin");
                           submit = true;
                           await verifyOTP(pin).then(
                             (value) {
@@ -281,7 +419,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               });
                             },
                           ).catchError((err) {
-                            print(err);
+                            // print(err);
                             setState(() {
                               submit = false;
                               failed = true;
@@ -325,6 +463,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ),
                                   TranslateText(
                                     text: "Incorrect code, please try again",
+                                    ukrainian:
+                                        "Неправильний код, спробуйте ще раз",
                                     style: GoogleFonts.poppins(
                                         textStyle: const TextStyle(
                                             color: Colors.red, fontSize: 15)),
@@ -342,12 +482,24 @@ class _AuthScreenState extends State<AuthScreen> {
                       height: 50,
                       width: 200,
                       child: Center(
-                          child: Text(
-                        "${6 - code.length} ${code.length == 5 ? 'digit' : 'digits'} left",
-                        style: GoogleFonts.poppins(
-                          textStyle: TextStyle(color: Colors.grey.shade600),
-                        ),
-                      )),
+                        child: Provider.of<Language>(context, listen: true)
+                                    .language ==
+                                LanguageType.en
+                            ? Text(
+                                "${6 - code.length} ${code.length == 5 ? 'digit' : 'digits'} left",
+                                style: GoogleFonts.poppins(
+                                  textStyle:
+                                      TextStyle(color: Colors.grey.shade600),
+                                ),
+                              )
+                            : Text(
+                                "${6 - code.length} ${code.length == 5 ? 'цифра' : 'цифри'} зліва",
+                                style: GoogleFonts.poppins(
+                                  textStyle:
+                                      TextStyle(color: Colors.grey.shade600),
+                                ),
+                              ),
+                      ),
                     ),
                   ],
                 ),
