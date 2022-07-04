@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:buk/config.dart' as config;
+
 class InvalidLocation extends StatelessWidget {
   const InvalidLocation({Key? key}) : super(key: key);
 
@@ -21,7 +23,7 @@ class InvalidLocation extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: Text(
-              "We don't currently operate in your area. This could be because you've disabled location services for this app, if that could be the case click the button below to be directed to your settings. If you think this is an error, please contact help@edwin-studios.com",
+              "We don't currently operate in your area. This could be because you've disabled location services for this app, if that could be the case click the button below to be directed to your settings. If you think this is an error, please contact ${config.helpEmail}",
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                 textStyle: const TextStyle(fontSize: 14, color: Colors.black54),

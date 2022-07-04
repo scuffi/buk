@@ -13,14 +13,19 @@ class FullScreenLoader extends StatelessWidget {
         child: Center(
           child: Column(children: [
             const Spacer(),
+            Image.asset(
+              "assets/logo_blank.png",
+              height: 200,
+              width: 200,
+            ),
             Padding(
               padding: const EdgeInsets.only(bottom: 24.0),
               child: GradientText(
-                "Buk",
-                colors: [Colors.purple[900]!, Colors.pinkAccent],
+                "UK2BUK",
+                colors: [Colors.purple[900]!, Colors.blueAccent],
                 style: GoogleFonts.lato(
                   textStyle: const TextStyle(
-                      fontSize: 100.0, fontWeight: FontWeight.bold),
+                      fontSize: 56.0, fontWeight: FontWeight.bold),
                 ),
               ),
             ),

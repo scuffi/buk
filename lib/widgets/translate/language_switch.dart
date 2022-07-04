@@ -80,7 +80,7 @@ class _LanguageSwitchState extends State<LanguageSwitch> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(32),
                 border: foreGround
-                    ? Border.all(color: Colors.purple[300]!, width: 4)
+                    ? Border.all(color: Colors.indigoAccent[100]!, width: 4)
                     : const Border()),
           ),
         );

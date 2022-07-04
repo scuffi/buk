@@ -1,6 +1,9 @@
+import 'package:buk/providers/language/language_enum.dart';
+import 'package:buk/providers/language/language_provider.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class LikeFeedEmpty extends StatelessWidget {
@@ -13,7 +16,10 @@ class LikeFeedEmpty extends StatelessWidget {
         const Spacer(),
         Center(
           child: GradientText(
-            "Oh no!",
+            Provider.of<Language>(context, listen: false).language ==
+                    LanguageType.en
+                ? "Oh No!"
+                : "O ні!",
             colors: [Colors.purple[900]!, Colors.pinkAccent],
             style: GoogleFonts.lato(
               textStyle:

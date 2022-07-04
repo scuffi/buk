@@ -51,6 +51,15 @@ class _FeedScreenState extends State<FeedScreen>
               ),
             ),
             const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(left: 55.0),
+              child: Image.asset(
+                "assets/logo_blank.png",
+                height: 40,
+                width: 40,
+              ),
+            ),
+            const Spacer(),
             const LanguageSwitch(),
           ],
         ),

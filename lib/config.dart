@@ -18,8 +18,10 @@ var offerColour = Colors.green;
 
 // ? Geolocation service
 // ! Production -> uk based
-// var middleLatitude = 53.8266;
-// var middleLongitude = -4.26279;
-var middleLatitude = 37.75877;
-var middleLongitude = -122.44675;
+var middleLatitude = 53.8266;
+var middleLongitude = -4.26279;
+// var middleLatitude = 37.75877;
+// var middleLongitude = -122.44675;
 var radius = 550000; // Radius in metres
+
+var helpEmail = "hello@uk2buk.com";

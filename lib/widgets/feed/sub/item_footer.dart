@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:buk/providers/user_provider.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:buk/widgets/feed/sub/admin_button.dart';
@@ -7,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:flutter_sms/flutter_sms.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
@@ -98,24 +100,19 @@ class ItemFooter extends StatelessWidget {
               : OutlinedButton(
                   onPressed: () async {
                     if (info.owner_contact.containsKey("phone")) {
-                      try {
-                        await sendSMS(
-                            message: "I'm interested in ${info.title}",
-                            recipients: [
-                              info.owner_contact["phone"].toString()
-                            ]);
-                      } catch (e) {
-                        print(e);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content:
-                                  Text('Failed to launch message service')),
-                        );
-                        launchUrlString(
-                            'mailto:${info.owner_contact["email"]}');
-                      }
+                      await sendMessage(
+                          context,
+                          info.owner_contact["phone"].toString(),
+                          "Hi, I'm interested in ${info.title}");
                     } else if (info.owner_contact.containsKey("email")) {
                       launchUrlString('mailto:${info.owner_contact["email"]}');
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'Users contact was invalid, please report this.'),
+                        ),
+                      );
                     }
                   },
                   child: const TranslateText(
@@ -131,5 +128,72 @@ class ItemFooter extends StatelessWidget {
 
   bool isAdmin(BuildContext context) {
     return Provider.of<UserProvider>(context, listen: false).admin;
+  }
+
+  sendMessage(BuildContext context, String number, String message) async {
+    var whatsappURl_android =
+        "whatsapp://send?phone=" + number + "&text=$message";
+    var whatappURL_ios = "https://wa.me/$number?text=${Uri.parse(message)}";
+    if (Platform.isIOS) {
+      // for iOS phone only
+      if (await canLaunchUrlString(whatappURL_ios)) {
+        await launchUrlString(whatappURL_ios);
+      } else {
+        String? encodeQueryParameters(Map<String, String> params) {
+          return params.entries
+              .map((e) =>
+                  '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+              .join('&');
+        }
+
+        Uri smsUri = Uri(
+          scheme: 'sms',
+          path: number,
+          query: encodeQueryParameters(<String, String>{'body': message}),
+        );
+
+        try {
+          if (await canLaunchUrlString(smsUri.toString())) {
+            await launchUrlString(smsUri.toString());
+          }
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to launch messaging service'),
+            ),
+          );
+        }
+      }
+    } else {
+      // android , web
+      if (await canLaunchUrlString(whatsappURl_android)) {
+        await launchUrlString(whatsappURl_android);
+      } else {
+        String? encodeQueryParameters(Map<String, String> params) {
+          return params.entries
+              .map((e) =>
+                  '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+              .join('&');
+        }
+
+        Uri smsUri = Uri(
+          scheme: 'sms',
+          path: number,
+          query: encodeQueryParameters(<String, String>{'body': message}),
+        );
+
+        try {
+          if (await canLaunchUrlString(smsUri.toString())) {
+            await launchUrlString(smsUri.toString());
+          }
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to launch messaging service'),
+            ),
+          );
+        }
+      }
+    }
   }
 }

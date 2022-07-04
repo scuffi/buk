@@ -57,8 +57,7 @@ class DonationsList extends StatelessWidget {
                         text: item.title,
                         style: GoogleFonts.lato(
                             textStyle: TextStyle(
-                                fontSize: 18,
-                                color: Theme.of(context).primaryColor)),
+                                fontSize: 18, color: Colors.blue[900])),
                       ),
                     ),
                     Flexible(
@@ -106,8 +105,8 @@ class DonationsList extends StatelessWidget {
                 ),
                 const Spacer(),
                 Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Colors.grey[700],
+                  Icons.open_in_new,
+                  color: Colors.blue[900],
                 ),
               ]),
             ),

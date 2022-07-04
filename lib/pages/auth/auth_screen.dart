@@ -1,5 +1,6 @@
 import 'package:buk/pages/auth/number_input.dart';
 import 'package:buk/providers/user_provider.dart';
+import 'package:buk/widgets/translate/language_switch.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,104 +39,125 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.indigoAccent,
-      body: Padding(
-        padding: const EdgeInsets.only(top: 200.0),
-        child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+      body: Stack(
+        alignment: AlignmentDirectional.center,
+        children: [
+          // const Positioned(
+          //   left: 280,
+          //   top: 50,
+          //   child: LanguageSwitch(),
+          // ),
+          Positioned(
+            top: 40,
+            child: Image.asset(
+              "assets/logo_blank.png",
+              height: 100,
+              width: 100,
             ),
-            child: Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
-                    child: Text(
-                      "Sign in",
-                      style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(
-                              color: Colors.indigoAccent, fontSize: 35)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Form(
-                      key: _formKey,
-                      // child: IntlPhoneField(
-                      //   // ? Dropdown
-                      //   dropdownDecoration: BoxDecoration(
-                      //       borderRadius: BorderRadius.circular(16)),
-                      //   dropdownIcon: const Icon(
-                      //     Icons.keyboard_arrow_down_outlined,
-                      //     color: Colors.black54,
-                      //   ),
-                      //   dropdownTextStyle: GoogleFonts.poppins(
-                      //     textStyle: const TextStyle(
-                      //         color: Colors.black87,
-                      //         fontWeight: FontWeight.normal,
-                      //         fontSize: 16),
-                      //   ),
-                      //   invalidNumberMessage: "Phone number is not valid",
-                      //   // ? Input
-                      //   style: GoogleFonts.poppins(
-                      //     textStyle: const TextStyle(
-                      //         color: Colors.black87,
-                      //         fontWeight: FontWeight.normal,
-                      //         fontSize: 16),
-                      //   ),
-                      //   decoration: const InputDecoration(
-                      //     labelText: 'Phone Number',
-                      //     border: OutlineInputBorder(
-                      //       borderSide: BorderSide(),
-                      //     ),
-                      //   ),
-                      //   initialCountryCode: 'GB',
-                      //   onChanged: (phone) {
-                      //     setState(() {
-                      //       number = phone.completeNumber;
-                      //     });
-                      //   },
-                      // ),
-                      child: const NumberInput(),
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.all(
-                        const Size(350, 50),
-                      ),
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.indigoAccent),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32.0),
+          ),
+          Positioned(
+            top: 120,
+            child: Text(
+              "UK2BUK",
+              style: GoogleFonts.poppins(
+                textStyle: const TextStyle(fontSize: 48, color: Colors.white),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 200.0),
+            child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16)),
+                ),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
+                        child: TranslateText(
+                          text: "Sign in",
+                          selectable: false,
+                          style: GoogleFonts.poppins(
+                              textStyle: const TextStyle(
+                                  color: Colors.indigoAccent, fontSize: 35)),
                         ),
                       ),
-                    ),
-                    onPressed: () async {
-                      setState(() {
-                        code = '';
-                        verificationID = '';
-                        submit = false;
-                      });
-                      if (_formKey.currentState!.validate()) {
-                        loginWithPhone();
-                      }
-                    },
-                    child: Text(
-                      "Sign in",
-                      style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: NumberInput(
+                          form: _formKey,
+                          onChanged: (phone, country) => setState(() {
+                            number = "+${country.dial_code}$phone";
+                          }),
+                        ),
                       ),
-                    ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all(
+                            const Size(350, 50),
+                          ),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.indigoAccent),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32.0),
+                            ),
+                          ),
+                        ),
+                        onPressed: () async {
+                          print(number);
+                          setState(() {
+                            code = '';
+                            verificationID = '';
+                            submit = false;
+                          });
+                          if (_formKey.currentState!.validate()) {
+                            loginWithPhone();
+                          }
+                        },
+                        child: TranslateText(
+                          text: "Sign in",
+                          selectable: false,
+                          style: GoogleFonts.poppins(
+                            textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          print("Open terms and conditions");
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: TranslateText(
+                            selectable: false,
+                            text:
+                                "By Signing in, you agree to our Terms & Conditions",
+                            style: GoogleFonts.lato(
+                                textStyle: const TextStyle(
+                                    color: Colors.black38, fontSize: 10)),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 50.0),
+                        child: LanguageSwitch(),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )),
+                )),
+          ),
+        ],
       ),
     );
   }

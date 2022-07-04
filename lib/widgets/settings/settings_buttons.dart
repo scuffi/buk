@@ -5,12 +5,16 @@ import 'package:buk/providers/user_provider.dart';
 import 'package:buk/screens/admin/verifications_screen.dart';
 import 'package:buk/screens/feed_screen.dart';
 import 'package:buk/widgets/settings/delete_dialog.dart';
+import 'package:buk/widgets/translate/language_switch.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+import 'package:buk/config.dart' as config;
 
 class SettingsButtons extends StatefulWidget {
   const SettingsButtons({Key? key}) : super(key: key);
@@ -86,21 +90,48 @@ class _SettingsButtonsState extends State<SettingsButtons> {
                 ),
               )
             : Container(), //
-        TextButton(
-          style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-          onPressed: () {
-            provider.toggleNotifications();
-          },
+        // TextButton(
+        //   style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+        //   onPressed: () {
+        //     provider.toggleNotifications();
+        //   },
+        //   child: Row(
+        //     children: [
+        //       const Icon(
+        //         Icons.notifications_none,
+        //         color: Colors.indigoAccent,
+        //       ),
+        //       Padding(
+        //         padding: const EdgeInsets.only(left: 10.0),
+        //         child: TranslateText(
+        //           text: "Notifications",
+        //           selectable: false,
+        //           style: GoogleFonts.lato(
+        //               textStyle: const TextStyle(fontSize: 16),
+        //               color: Colors.grey[700]),
+        //         ),
+        //       ),
+        //       const Spacer(),
+        //       Switch.adaptive(
+        //           value: provider.notifications,
+        //           onChanged: (toggled) {
+        //             provider.setNotifications(toggled);
+        //           })
+        //     ],
+        //   ),
+        // ), // Notifications section
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
           child: Row(
             children: [
               const Icon(
-                Icons.notifications_none,
+                Icons.language,
                 color: Colors.indigoAccent,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10.0),
                 child: TranslateText(
-                  text: "Notifications",
+                  text: "Language",
                   selectable: false,
                   style: GoogleFonts.lato(
                       textStyle: const TextStyle(fontSize: 16),
@@ -108,18 +139,22 @@ class _SettingsButtonsState extends State<SettingsButtons> {
                 ),
               ),
               const Spacer(),
-              Switch.adaptive(
-                  value: provider.notifications,
-                  onChanged: (toggled) {
-                    provider.setNotifications(toggled);
-                  })
+              const LanguageSwitch(),
             ],
           ),
-        ), // Notifications section
+        ),
         TextButton(
           style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-          onPressed: () {
-            print("Help pressed");
+          onPressed: () async {
+            String url = "mailto:${config.helpEmail}";
+
+            if (await canLaunchUrlString(url)) {
+              await launchUrlString(url);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                      "Failed to launch email service. Please email ${config.helpEmail}")));
+            }
           },
           child: Row(
             children: [

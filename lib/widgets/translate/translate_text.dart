@@ -13,6 +13,7 @@ class TranslateText extends StatefulWidget {
   final TextStyle? style;
   final TextAlign? textAlign;
   final bool selectable;
+  final TextOverflow? overflow;
 
   const TranslateText({
     Key? key,
@@ -22,6 +23,7 @@ class TranslateText extends StatefulWidget {
     this.style,
     this.textAlign,
     this.selectable = true,
+    this.overflow,
   }) : super(key: key);
 
   @override
@@ -56,6 +58,7 @@ class _TranslateTextState extends State<TranslateText> {
                     currentTranslation!,
                     style: widget.style,
                     textAlign: widget.textAlign,
+                    overflow: widget.overflow,
                   )
             : Shimmer.fromColors(
                 child: Container(
