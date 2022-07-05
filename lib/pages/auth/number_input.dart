@@ -182,7 +182,7 @@ class _NumberInputState extends State<NumberInput> {
             padding: const EdgeInsets.only(right: 8.0),
             child: Text(
               selected.emoji,
-              style: const TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black, fontSize: 15),
             ),
           ),
           const Spacer(),

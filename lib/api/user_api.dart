@@ -1,4 +1,5 @@
 import 'package:buk/api/feed_api.dart';
+import 'package:buk/widgets/feed/interface/blocked_type.dart';
 import 'package:buk/widgets/feed/interface/category_type.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -295,7 +296,7 @@ final functions = FirebaseFunctions.instance;
 Future<bool> isVerified(User user) async {
   try {
     var verified = await functions.httpsCallable('isVerified').call();
-    return verified.data.toString() == "true" ? true : false;
+    return verified.data;
   } on FirebaseFunctionsException {
     // print(e.message);
     return false;
@@ -308,6 +309,127 @@ Future<bool> isAdmin(User user) async {
     return verified.data;
   } on FirebaseFunctionsException {
     // print(e.message);
+    return false;
+  }
+}
+
+/// Fetches the users block list
+Future<List<BlockItem>> getBlocks(User user) async {
+  var userDoc = await getUserDocument(user);
+  if (userDoc == null) {
+    return [];
+  }
+
+  var doc = await userDoc.get();
+
+  Map<String, dynamic> data = doc.data()!;
+
+  if (!data.containsKey("blocks")) {
+    data["blocks"] = [];
+
+    // If likes is empty, we can assume that nothing can be removed so it 'worked'
+    return [];
+  }
+
+  var blocks = List.from(data["blocks"]);
+  var returned = <BlockItem>[];
+
+  blocks.forEach((element) {
+    returned.add(BlockItem(id: element["id"], name: element["name"]));
+  });
+
+  return returned;
+}
+
+/// Add a user to owners block list
+Future<bool> addUserBlock(User user, BlockItem item) async {
+  var userDoc = await getUserDocument(user);
+  if (userDoc == null) {
+    return false;
+  }
+
+  var doc = await userDoc.get();
+
+  Map<String, dynamic> data = doc.data()!;
+
+  if (!data.containsKey("blocks")) {
+    data["blocks"] = [];
+  }
+
+  var blocks = List.from(data["blocks"]);
+
+  blocks.add({"id": item.id, "name": item.name});
+
+  data["blocks"] = blocks;
+
+  print(data);
+
+  // print("Adding like to ${user.uid}");
+
+  try {
+    await userDoc.set(data);
+    return true;
+  } catch (e) {
+    print("Error: $e");
+    return false;
+  }
+}
+
+/// Remove block by ID of blocked user
+Future<bool> removeUserBlockById(User user, String itemId) async {
+  var userDoc = await getUserDocument(user);
+  if (userDoc == null) {
+    return false;
+  }
+
+  var doc = await userDoc.get();
+
+  Map<String, dynamic> data = doc.data()!;
+
+  if (!data.containsKey("blocks")) {
+    data["blocks"] = [];
+
+    // If likes is empty, we can assume that nothing can be removed so it 'worked'
+    return true;
+  }
+
+  var blocks = List.from(data["blocks"]);
+  var returned = <Map>[];
+
+  for (var element in blocks) {
+    if (element["id"] != itemId) {
+      returned.add({"id": element["id"], "name": element["name"]});
+    }
+  }
+
+  data["blocks"] = returned;
+
+  // print("Removing like from ${user.uid}");
+
+  try {
+    await userDoc.set(data);
+    return true;
+  } catch (e) {
+    print("Error: $e");
+    return false;
+  }
+}
+
+/// Report a post
+Future<bool> reportPost(ItemData post, String reportMessage) async {
+  var db = FirebaseFirestore.instance;
+  var col = db.collection(config.reportCollectionName);
+
+  var input = {
+    "report_doc": post.id,
+    "report_context": reportMessage,
+  };
+
+  try {
+    await col.add(input);
+    return true;
+  } catch (e) {
+    // print(e);
     return false;
   }
 }

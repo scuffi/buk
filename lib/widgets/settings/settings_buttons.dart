@@ -3,6 +3,7 @@ import 'package:buk/providers/screen/screen_provider.dart';
 import 'package:buk/providers/settings_provider.dart';
 import 'package:buk/providers/user_provider.dart';
 import 'package:buk/screens/admin/verifications_screen.dart';
+import 'package:buk/screens/blocked_users_screen.dart';
 import 'package:buk/screens/feed_screen.dart';
 import 'package:buk/widgets/settings/delete_dialog.dart';
 import 'package:buk/widgets/translate/language_switch.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'package:buk/config.dart' as config;
@@ -318,10 +320,48 @@ class _SettingsButtonsState extends State<SettingsButtons> {
                   Icons.arrow_forward_ios_rounded,
                   color: Colors.grey[700],
                 ),
-              )
+              ),
             ],
           ),
         ), // Logout
+        TextButton(
+          style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+          onPressed: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                type: PageTransitionType.rightToLeft,
+                child: const BlockedUsersScreen(),
+              ),
+            );
+          },
+          child: Row(
+            children: [
+              const Icon(
+                Icons.block,
+                color: Colors.indigoAccent,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: TranslateText(
+                  text: "Blocked users",
+                  selectable: false,
+                  style: GoogleFonts.lato(
+                      textStyle: const TextStyle(fontSize: 16),
+                      color: Colors.grey[700]),
+                ),
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Colors.grey[700],
+                ),
+              )
+            ],
+          ),
+        )
       ],
     );
   }

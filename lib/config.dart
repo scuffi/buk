@@ -5,6 +5,7 @@ var firebaseName = "Temporary-ed";
 var feedCollectionName = "feed";
 var userCollectionName = "users";
 var donationsCollectionName = "donations";
+var reportCollectionName = "reports";
 
 var limitAmount = 5;
 

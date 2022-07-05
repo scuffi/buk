@@ -1,7 +1,10 @@
 import 'package:buk/providers/feed/feed_type.dart';
+import 'package:buk/providers/settings_provider.dart';
 import 'package:buk/widgets/feed/interface/category_type.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
+import 'package:buk/widgets/settings/profanity_filter.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FeedData with ChangeNotifier {
   List<ItemData> _request_items = [];

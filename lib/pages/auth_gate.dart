@@ -100,6 +100,9 @@ class _AuthGateState extends State<AuthGate> {
                 }
               });
 
+              // Get the blocked users of this user
+              provider.setBlocks(await getBlocks(provider.user!));
+
               List<ItemData>? likes = await getUserLikes(provider.user!);
 
               // Add like items to provider if not null

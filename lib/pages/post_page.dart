@@ -8,6 +8,7 @@ import 'package:buk/widgets/post/description_input.dart';
 import 'package:buk/widgets/post/image_upload.dart';
 import 'package:buk/widgets/post/title_input.dart';
 import 'package:buk/widgets/post/type_selector.dart';
+import 'package:buk/widgets/settings/profanity_filter.dart';
 import 'package:buk/widgets/translate/translate_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -232,6 +233,24 @@ class _PostPageState extends State<PostPage> {
                                     );
                                   });
 
+                              String title = item.title!;
+                              String description = item.description!;
+
+                              if (containsProfanity(title.toLowerCase()) ||
+                                  containsProfanity(
+                                      description.toLowerCase())) {
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                        content: TranslateText(
+                                  text:
+                                      "Post rejected to potentially abusive content. Please double check your message.",
+                                  ukrainian:
+                                      "Публікацію відхилено через потенційно образливий вміст. Перевірте своє повідомлення.",
+                                )));
+                                return;
+                              }
+
                               String? id = const Uuid().v4();
 
                               List<String> images = [];
@@ -258,8 +277,6 @@ class _PostPageState extends State<PostPage> {
                                 "phone": user.user!.phoneNumber
                               };
 
-                              String title = item.title!;
-                              String description = item.description!;
                               String itemType = item.type;
                               String category = item.category;
 

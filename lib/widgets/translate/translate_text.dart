@@ -22,7 +22,7 @@ class TranslateText extends StatefulWidget {
     this.ukrainian,
     this.style,
     this.textAlign,
-    this.selectable = true,
+    this.selectable = false,
     this.overflow,
   }) : super(key: key);
 

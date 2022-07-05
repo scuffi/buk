@@ -1,8 +1,13 @@
 import 'package:buk/api/feed_api.dart';
+import 'package:buk/api/user_api.dart';
+import 'package:buk/providers/language/language_enum.dart';
+import 'package:buk/providers/language/language_provider.dart';
 import 'package:buk/providers/user_provider.dart';
+import 'package:buk/widgets/feed/interface/blocked_type.dart';
 import 'package:buk/widgets/feed/interface/item_data.dart';
 import 'package:buk/widgets/feed/sub/like_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -152,7 +157,186 @@ class ItemHeader extends StatelessWidget {
                     liked: Provider.of<UserProvider>(context, listen: true)
                         .hasLiked(info),
                   ),
+        context.read<UserProvider>().user!.uid != info.owner_id
+            ? SizedBox(
+                height: 50,
+                width: 50,
+                child: TextButton(
+                  child: const Icon(
+                    Icons.more_vert,
+                    color: Colors.black87,
+                  ),
+                  onPressed: () async {
+                    queryDialog(context, info);
+                  },
+                ),
+              )
+            : Container()
       ],
     );
+  }
+
+  void queryDialog(BuildContext context, ItemData item) {
+    showDialog(
+        context: context,
+        builder: (con) {
+          return AlertDialog(
+            title: const TranslateText(text: "More..."),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 4.0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await Provider.of<UserProvider>(context, listen: false)
+                            .addBlock(BlockItem(
+                                id: item.owner_id, name: item.owner_name));
+                        Navigator.pop(context);
+                      },
+                      child: TranslateText(
+                        text: "Block '${item.owner_name}'",
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        reportDialog(context, item);
+                      },
+                      child: TranslateText(
+                        text: "Report '${item.title}'",
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              OutlinedButton(
+                onPressed: () => Navigator.pop(context),
+                child: TranslateText(
+                  text: "Cancel",
+                  ukrainian: "Скасувати",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Colors.grey[700])),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  void reportDialog(BuildContext context, ItemData item) {
+    showDialog(
+        context: context,
+        builder: (con) {
+          var text = "";
+          return AlertDialog(
+            title: TranslateText(text: "Report '${item.title}'"),
+            content: SizedBox(
+              width: 500,
+              child: Form(
+                child: TextFormField(
+                  maxLength: 150,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  maxLines: 4,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (input) {
+                    if (input == null || input.length < 25) {
+                      return Provider.of<Language>(context).language ==
+                              LanguageType.en
+                          ? "Reports must have at least 25 characters"
+                          : "Звіти повинні мати не менше 25 символів";
+                    } else {
+                      return null;
+                    }
+                  },
+                  onChanged: (str) {
+                    text = str;
+                  },
+                ),
+              ),
+            ),
+            actions: [
+              OutlinedButton(
+                onPressed: () => Navigator.pop(context),
+                child: TranslateText(
+                  text: "Cancel",
+                  ukrainian: "Скасувати",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Colors.grey[700])),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  loadingDialog(context, "Submitting report");
+                  var success = await reportPost(item, text);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+
+                  if (success) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: TranslateText(
+                      text:
+                          "Submitted your report. Please give us time to resolve it.",
+                      ukrainian:
+                          "Надіслали свій звіт. Дайте нам час вирішити це питання.",
+                    )));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: TranslateText(
+                      text: "Failed to submit report. Please try again later.",
+                      ukrainian:
+                          "He вдалося подати звіт. Будь-ласка спробуйте пізніше.",
+                    )));
+                  }
+                },
+                child: TranslateText(
+                  text: "Submit report",
+                  ukrainian: "Здати звіт",
+                  style: GoogleFonts.lato(
+                      textStyle: const TextStyle(color: Colors.white)),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  void loadingDialog(BuildContext context, String message) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Colors.indigoAccent[100],
+            child: SizedBox(
+              height: 200,
+              width: 350,
+              child: Column(children: [
+                const Spacer(),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  child: CircularProgressIndicator(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: TranslateText(
+                    text: message,
+                    style: GoogleFonts.poppins(
+                        textStyle: const TextStyle(fontSize: 18)),
+                  ),
+                ),
+                const Spacer(),
+              ]),
+            ),
+          );
+        });
   }
 }
