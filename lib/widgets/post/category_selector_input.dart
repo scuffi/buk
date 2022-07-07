@@ -43,29 +43,32 @@ class PostCategoryForm extends StatelessWidget {
               context: context,
               backgroundColor: Colors.transparent,
               builder: (context) => SizedBox(
-                height: ItemCategory.values.length * 50 + 10,
-                child: ListView.separated(
-                  itemCount: ItemCategory.values.length,
-                  itemBuilder: (context, index) => TextButton(
-                    child: TranslateText(
-                      selectable: false,
-                      text: ItemCategory.values[index]
-                          .toString()
-                          .split('.')
-                          .last
-                          .toCapitalized(),
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                height: ItemCategory.values.length * 50 + 40,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 30.0),
+                  child: ListView.separated(
+                    itemCount: ItemCategory.values.length,
+                    itemBuilder: (context, index) => TextButton(
+                      child: TranslateText(
+                        selectable: false,
+                        text: ItemCategory.values[index]
+                            .toString()
+                            .split('.')
+                            .last
+                            .toCapitalized(),
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
+                      onPressed: () => {
+                        Provider.of<PostFormProvider>(context, listen: false)
+                            .setCategory(ItemCategory.values[index]),
+                        Navigator.pop(context),
+                      },
                     ),
-                    onPressed: () => {
-                      Provider.of<PostFormProvider>(context, listen: false)
-                          .setCategory(ItemCategory.values[index]),
-                      Navigator.pop(context),
-                    },
-                  ),
-                  separatorBuilder: (context, index) => const Divider(
-                    height: 5,
+                    separatorBuilder: (context, index) => const Divider(
+                      height: 5,
+                    ),
                   ),
                 ),
               ),

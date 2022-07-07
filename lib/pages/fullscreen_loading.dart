@@ -29,7 +29,7 @@ class FullScreenLoader extends StatelessWidget {
                 ),
               ),
             ),
-            const Center(child: CircularProgressIndicator()),
+            const Center(child: CircularProgressIndicator.adaptive()),
             const Spacer(),
           ]),
         ),

@@ -38,60 +38,63 @@ class ImagePost extends StatelessWidget {
                     await showBarModalBottomSheet(
                         context: context,
                         builder: (context) => SizedBox(
-                              height: 101,
-                              child: Column(
-                                children: [
-                                  TextButton(
-                                    child: TranslateText(
-                                      text: "Take photo",
-                                      selectable: false,
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
+                              height: 129,
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 30.0),
+                                child: Column(
+                                  children: [
+                                    TextButton(
+                                      child: TranslateText(
+                                        text: "Take photo",
+                                        selectable: false,
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
                                       ),
+                                      onPressed: () async {
+                                        Navigator.pop(context);
+
+                                        final XFile? photo =
+                                            await picker.pickImage(
+                                                source: ImageSource.camera);
+
+                                        if (photo != null &&
+                                            images.images.length < maxPhotos &&
+                                            images.images.length + 1 <=
+                                                maxPhotos) {
+                                          images.addImage(photo);
+                                        }
+                                      },
                                     ),
-                                    onPressed: () async {
-                                      Navigator.pop(context);
-
-                                      final XFile? photo =
-                                          await picker.pickImage(
-                                              source: ImageSource.camera);
-
-                                      if (photo != null &&
-                                          images.images.length < maxPhotos &&
-                                          images.images.length + 1 <=
-                                              maxPhotos) {
-                                        images.addImage(photo);
-                                      }
-                                    },
-                                  ),
-                                  const Divider(
-                                    thickness: 1,
-                                    height: 3,
-                                  ),
-                                  TextButton(
-                                    child: TranslateText(
-                                      text: "Choose from camera roll",
-                                      selectable: false,
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
+                                    const Divider(
+                                      thickness: 1,
+                                      height: 3,
+                                    ),
+                                    TextButton(
+                                      child: TranslateText(
+                                        text: "Choose from camera roll",
+                                        selectable: false,
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
                                       ),
+                                      onPressed: () async {
+                                        Navigator.pop(context);
+
+                                        final List<XFile>? photos =
+                                            await picker.pickMultiImage();
+
+                                        if (photos != null &&
+                                            images.images.length < maxPhotos &&
+                                            photos.length +
+                                                    images.images.length <=
+                                                maxPhotos) {
+                                          images.addImages(photos);
+                                        }
+                                      },
                                     ),
-                                    onPressed: () async {
-                                      Navigator.pop(context);
-
-                                      final List<XFile>? photos =
-                                          await picker.pickMultiImage();
-
-                                      if (photos != null &&
-                                          images.images.length < maxPhotos &&
-                                          photos.length +
-                                                  images.images.length <=
-                                              maxPhotos) {
-                                        images.addImages(photos);
-                                      }
-                                    },
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ));
                   }),

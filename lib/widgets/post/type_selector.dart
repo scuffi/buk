@@ -26,6 +26,7 @@ class TypeSelector extends StatelessWidget {
         Consumer<PostFormProvider>(
           builder: (context, value, child) {
             return AnimatedToggleSwitch<bool>.size(
+              innerColor: Colors.white,
               height: 45,
               // borderRadius: BorderRadius.circular(32),
               dif: 8,
